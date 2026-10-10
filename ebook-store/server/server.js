@@ -30,12 +30,12 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// API Health Check
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'online',
+// Universal Health Check Route for Render, UptimeRobot, and Cloudflare
+app.get(['/health', '/api/health'], (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'hengyi-ebook-store-api',
     timestamp: new Date().toISOString(),
-    service: '恒一 Hengyi Digital Planner Studio API',
     database: mongoose.connection.readyState === 1 ? 'connected' : 'connecting/offline',
     razorpayConfigured: !!(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_ID !== 'rzp_test_placeholder'),
   });
@@ -75,4 +75,22 @@ app.listen(PORT, () => {
   console.log(`📡 API Base URL: http://localhost:${PORT}/api`);
   console.log(`💳 Razorpay Key: ${process.env.RAZORPAY_KEY_ID ? 'Loaded' : 'Placeholder'}`);
   console.log(`======================================================\n`);
+
+  // Render Free-Tier Anti-Sleep Self-Pinger (runs every 10 mins when RENDER_EXTERNAL_URL is available)
+  const renderExternalUrl = process.env.RENDER_EXTERNAL_URL || process.env.BACKEND_URL;
+  if (renderExternalUrl) {
+    const PING_INTERVAL = 10 * 60 * 1000; // 10 minutes (Render spins down after 15 mins)
+    setInterval(async () => {
+      try {
+        const pingUrl = `${renderExternalUrl.replace(/\/$/, '')}/health`;
+        const res = await fetch(pingUrl);
+        if (res.ok) {
+          console.log(`[Anti-Sleep] Kept Render active: pinged ${pingUrl} at ${new Date().toLocaleTimeString()}`);
+        }
+      } catch (err) {
+        console.warn(`[Anti-Sleep] Ping warning:`, err.message);
+      }
+    }, PING_INTERVAL);
+    console.log(`✓ Keep-Alive engine active for: ${renderExternalUrl}`);
+  }
 });

@@ -13,7 +13,8 @@ import {
   apiCreateCoupon,
   apiDeleteCoupon,
   apiFetchOrders,
-  apiVerifyRazorpayPayment
+  apiVerifyRazorpayPayment,
+  apiWakeupServer
 } from './services/api';
 import Header from './components/Header';
 import LandingPage from './components/LandingPage';
@@ -143,6 +144,7 @@ export default function App() {
   useEffect(() => {
     let isMounted = true;
     async function loadServerData() {
+      apiWakeupServer();
       try {
         const remoteProducts = await apiFetchProducts();
         if (isMounted && Array.isArray(remoteProducts) && remoteProducts.length > 0) {

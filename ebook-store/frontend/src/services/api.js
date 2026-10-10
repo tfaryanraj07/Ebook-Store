@@ -27,6 +27,16 @@ async function request(endpoint, options = {}) {
   }
 }
 
+// Background server warm-up to mitigate Render cold starts
+export async function apiWakeupServer() {
+  try {
+    const rawUrl = API_BASE_URL.replace(/\/api$/, '');
+    await fetch(`${rawUrl}/health`, { mode: 'cors' });
+  } catch (e) {
+    // Ignore warm-up notices
+  }
+}
+
 // 1. PRODUCTS API
 export async function apiFetchProducts() {
   try {
