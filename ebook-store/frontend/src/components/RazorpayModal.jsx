@@ -121,13 +121,10 @@ export default function RazorpayModal({
       console.warn('Backend Razorpay order creation notice:', e.message);
     }
 
-    // 2. Load Razorpay Checkout SDK if a genuine rzp_test or rzp_live key is provided
-    const isRealKey = activeKey && 
-      (activeKey.startsWith('rzp_test_') || activeKey.startsWith('rzp_live_')) && 
-      activeKey !== 'rzp_test_placeholder';
-    const isLoaded = isRealKey ? await loadRazorpayScript() : false;
+    // 2. Load Razorpay Checkout SDK and open official Checkout Frame
+    const isLoaded = await loadRazorpayScript();
 
-    if (isRealKey && isLoaded && window.Razorpay) {
+    if (isLoaded && window.Razorpay) {
       try {
         const options = {
           key: activeKey,
@@ -136,14 +133,16 @@ export default function RazorpayModal({
           name: '恒一 Hengyi Digital Studio',
           description: `${orderData.cartItems?.length || 1} Digital Planners`,
           image: 'https://cdn-icons-png.flaticon.com/512/3145/3145765.png',
-          order_id: generatedOrderId.startsWith('order_') ? generatedOrderId : undefined,
           prefill: {
-            name: customerName.trim() || currentUser?.name || '',
-            email: customerEmail.trim() || currentUser?.email || '',
-            contact: customerPhone.trim() || ''
+            name: customerName.trim() || currentUser?.name || 'Customer',
+            email: customerEmail.trim() || currentUser?.email || 'customer@hengyi.studio',
+            contact: customerPhone.trim() || '9876543210'
+          },
+          notes: {
+            customerEmail: customerEmail.trim()
           },
           theme: {
-            color: '#241E1C'
+            color: '#0C2340'
           },
           handler: function (response) {
             handleFinishSuccess(
@@ -160,27 +159,32 @@ export default function RazorpayModal({
           }
         };
 
+        // If backend provided a real razorpay order id from API, attach it
+        if (generatedOrderId && generatedOrderId.startsWith('order_') && generatedOrderId.length > 18) {
+          options.order_id = generatedOrderId;
+        }
+
         const rzp = new window.Razorpay(options);
         
         rzp.on('payment.failed', function (response) {
           console.warn('Razorpay payment failed:', response.error);
           setIsProcessing(false);
-          setErrorMessage(response.error?.description || 'Payment did not complete. Please try another payment mode.');
+          setErrorMessage(response.error?.description || 'Payment did not complete. Please check and try again.');
         });
 
         rzp.open();
         setIsProcessing(false);
         return;
       } catch (err) {
-        console.warn('Razorpay SDK modal invocation notice:', err.message);
+        console.error('Razorpay SDK open error:', err);
+        setErrorMessage('Failed to open Razorpay gateway. Please refresh and try again.');
+        setIsProcessing(false);
+        return;
       }
+    } else {
+      setErrorMessage('Razorpay Checkout SDK is still loading. Please check internet connection.');
+      setIsProcessing(false);
     }
-
-    // Fallback: If live key is placeholder or network blocks Razorpay SDK, simulate immediate sandbox approval
-    setStatusMessage('Simulating Razorpay Test Mode verification...');
-    setTimeout(() => {
-      handleFinishSuccess(generatedOrderId, `pay_${Math.random().toString(36).substring(2, 12).toUpperCase()}`);
-    }, 1200);
   };
 
   // Instant Test Simulator Payment
@@ -438,7 +442,7 @@ export default function RazorpayModal({
                       <button
                         key={b}
                         type="button"
-                        onClick={() => handleSimulatePayment()}
+                        onClick={() => handleProceedWithRazorpay()}
                         className="p-2.5 rounded-xl border border-[#CCD8E5] hover:bg-[#F0F5FA] hover:border-[#3395FF] text-center font-medium text-[#204060] transition-colors cursor-pointer"
                       >
                         {b}
@@ -449,35 +453,25 @@ export default function RazorpayModal({
               </div>
             </div>
 
-            {/* Action Buttons: Official Razorpay Test Checkout + Instant Sandbox */}
+            {/* Action Buttons: Official Razorpay Checkout */}
             <div className="space-y-2 pt-1">
               <button
                 type="button"
                 onClick={handleProceedWithRazorpay}
                 disabled={isProcessing}
-                className="w-full py-3.5 rounded-xl bg-[#3395FF] hover:bg-[#1E83F0] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-75"
+                className="w-full py-4 rounded-xl bg-[#0C2340] hover:bg-[#16355C] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-75"
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#3395FF]" />
                     <span>{statusMessage || 'Connecting to Razorpay...'}</span>
                   </>
                 ) : (
                   <>
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Proceed to Razorpay Checkout (Test Mode)</span>
+                    <ExternalLink className="w-4 h-4 text-[#3395FF]" />
+                    <span>Pay ₹{totalAmount} with Razorpay</span>
                   </>
                 )}
-              </button>
-
-              <button
-                type="button"
-                onClick={handleSimulatePayment}
-                disabled={isProcessing}
-                className="w-full py-2.5 rounded-xl bg-[#F0F5FA] hover:bg-[#E2EDF7] text-[#1D4A79] font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <Lock className="w-3.5 h-3.5 text-[#3395FF]" />
-                <span>Quick Test Payment (Simulate ₹{totalAmount})</span>
               </button>
             </div>
 
