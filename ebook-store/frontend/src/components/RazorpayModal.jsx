@@ -59,7 +59,7 @@ export default function RazorpayModal({
     });
   };
 
-  const handleFinishSuccess = (orderId, paymentId) => {
+  const handleFinishSuccess = (orderId, paymentId, signature) => {
     setIsProcessing(false);
     setIsSuccess(true);
 
@@ -75,7 +75,7 @@ export default function RazorpayModal({
       onSuccess({
         orderId: orderId || `rzp_order_${Date.now()}`,
         paymentId: paymentId || `pay_${Math.random().toString(36).substring(2, 12).toUpperCase()}`,
-        signature: 'razorpay_verified_signature_token',
+        signature: signature || 'razorpay_verified_signature_token',
         amount: totalAmount,
         customerName: customerName.trim() || currentUser?.name || 'Customer',
         customerEmail: customerEmail.trim() || currentUser?.email || 'customer@hengyi.studio',
@@ -121,8 +121,10 @@ export default function RazorpayModal({
       console.warn('Backend Razorpay order creation notice:', e.message);
     }
 
-    // 2. Load Razorpay Checkout SDK if a genuine rzp_test key is provided
-    const isRealKey = activeKey && activeKey.startsWith('rzp_test_') && activeKey !== 'rzp_test_placeholder';
+    // 2. Load Razorpay Checkout SDK if a genuine rzp_test or rzp_live key is provided
+    const isRealKey = activeKey && 
+      (activeKey.startsWith('rzp_test_') || activeKey.startsWith('rzp_live_')) && 
+      activeKey !== 'rzp_test_placeholder';
     const isLoaded = isRealKey ? await loadRazorpayScript() : false;
 
     if (isRealKey && isLoaded && window.Razorpay) {
@@ -144,7 +146,11 @@ export default function RazorpayModal({
             color: '#241E1C'
           },
           handler: function (response) {
-            handleFinishSuccess(response.razorpay_order_id || generatedOrderId, response.razorpay_payment_id);
+            handleFinishSuccess(
+              response.razorpay_order_id || generatedOrderId, 
+              response.razorpay_payment_id,
+              response.razorpay_signature
+            );
           },
           modal: {
             ondismiss: function () {
@@ -159,7 +165,7 @@ export default function RazorpayModal({
         rzp.on('payment.failed', function (response) {
           console.warn('Razorpay payment failed:', response.error);
           setIsProcessing(false);
-          setErrorMessage(response.error?.description || 'Payment did not complete. You can test with Quick Simulation.');
+          setErrorMessage(response.error?.description || 'Payment did not complete. Please try another payment mode.');
         });
 
         rzp.open();

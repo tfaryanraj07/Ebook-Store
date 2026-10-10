@@ -7,27 +7,31 @@ const User = require('../models/User');
 const router = express.Router();
 
 // Initialize Razorpay instance
-let razorpayInstance = null;
-const keyId = process.env.RAZORPAY_KEY_ID;
-const keySecret = process.env.RAZORPAY_KEY_SECRET;
+// Dynamic Razorpay instance getter so keys updated on Render or .env take effect immediately
+function getRazorpayInstance() {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-if (keyId && keySecret && keyId !== 'rzp_test_placeholder') {
-  try {
-    razorpayInstance = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    });
-    console.log('✓ Razorpay SDK initialized with key:', keyId.slice(0, 8) + '...');
-  } catch (err) {
-    console.error('Failed to initialize Razorpay SDK:', err.message);
+  if (keyId && keySecret && keyId !== 'rzp_test_placeholder' && keySecret !== 'razorpay_secret_placeholder') {
+    try {
+      return {
+        instance: new Razorpay({ key_id: keyId, key_secret: keySecret }),
+        keyId,
+        keySecret
+      };
+    } catch (err) {
+      console.error('Failed to create Razorpay instance:', err.message);
+    }
   }
+  return { instance: null, keyId: keyId || 'rzp_test_placeholder', keySecret: keySecret || '' };
 }
 
 // GET /api/payments/key - Expose public key to frontend
 router.get('/key', (req, res) => {
+  const { instance, keyId } = getRazorpayInstance();
   res.json({
     keyId: keyId || 'rzp_test_placeholder',
-    isLiveConfigured: !!razorpayInstance,
+    isLiveConfigured: !!instance,
   });
 });
 
@@ -40,15 +44,16 @@ router.post('/create-order', async (req, res) => {
       return res.status(400).json({ error: 'Order items and amount are required' });
     }
 
+    const { instance, keyId } = getRazorpayInstance();
     const receipt = `rcpt_${Date.now().toString().slice(-8)}`;
     const amountInPaise = Math.round(Number(amount) * 100);
 
     let razorpayOrder;
 
     // Use live Razorpay instance if keys are configured
-    if (razorpayInstance) {
+    if (instance) {
       try {
-        razorpayOrder = await razorpayInstance.orders.create({
+        razorpayOrder = await instance.orders.create({
           amount: amountInPaise,
           currency: 'INR',
           receipt,
@@ -58,7 +63,7 @@ router.post('/create-order', async (req, res) => {
           },
         });
       } catch (rzpErr) {
-        console.error('Razorpay API error:', rzpErr);
+        console.error('Razorpay API order create error:', rzpErr);
         return res.status(500).json({ error: rzpErr.error?.description || 'Razorpay order creation failed' });
       }
     } else {
@@ -108,14 +113,16 @@ router.post('/verify-payment', async (req, res) => {
       razorpay_order_id, 
       razorpay_payment_id, 
       razorpay_signature,
+      customerName,
       customerEmail,
       userId,
       purchasedItemIds 
     } = req.body;
 
+    const { instance, keySecret } = getRazorpayInstance();
     let isSignatureValid = false;
 
-    if (razorpayInstance && keySecret && keySecret !== 'razorpay_secret_placeholder') {
+    if (instance && keySecret) {
       // Real cryptographic HMAC SHA256 validation
       const generatedSignature = crypto
         .createHmac('sha256', keySecret)
@@ -146,13 +153,36 @@ router.post('/verify-payment', async (req, res) => {
 
     // Grant products to user's personal digital library in MongoDB
     let updatedUser = null;
-    if (customerEmail) {
-      const itemIdsToGrant = Array.isArray(purchasedItemIds) ? purchasedItemIds : [];
-      updatedUser = await User.findOneAndUpdate(
-        { email: customerEmail.toLowerCase() },
-        { $addToSet: { purchasedProducts: { $each: itemIdsToGrant } } },
-        { new: true }
-      );
+    const emailToUse = (customerEmail || '').toLowerCase().trim();
+    const itemIdsToGrant = Array.isArray(purchasedItemIds) ? purchasedItemIds : [];
+
+    if (emailToUse) {
+      updatedUser = await User.findOne({ email: emailToUse });
+      if (updatedUser) {
+        // User already exists: append purchased items
+        if (itemIdsToGrant.length > 0) {
+          updatedUser.purchasedProducts = Array.from(new Set([
+            ...(updatedUser.purchasedProducts || []),
+            ...itemIdsToGrant
+          ]));
+          await updatedUser.save();
+        }
+      } else {
+        // Customer paid as guest: automatically provision customer record so they keep their purchases!
+        try {
+          const bcrypt = require('bcryptjs');
+          const randomPassword = `Hengyi@${Math.floor(1000 + Math.random() * 9000)}`;
+          const hashedPassword = await bcrypt.hash(randomPassword, 10);
+          updatedUser = await User.create({
+            name: customerName || emailToUse.split('@')[0],
+            email: emailToUse,
+            password: hashedPassword,
+            purchasedProducts: itemIdsToGrant,
+          });
+        } catch (createErr) {
+          console.warn('Auto guest user creation note:', createErr.message);
+        }
+      }
     }
 
     res.json({
@@ -162,6 +192,7 @@ router.post('/verify-payment', async (req, res) => {
       order: updatedOrder,
       user: updatedUser ? {
         id: updatedUser._id,
+        name: updatedUser.name,
         email: updatedUser.email,
         purchasedProducts: updatedUser.purchasedProducts,
       } : null,

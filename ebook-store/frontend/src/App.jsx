@@ -387,13 +387,23 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
-      await apiVerifyRazorpayPayment({
+      const verifyRes = await apiVerifyRazorpayPayment({
         razorpay_order_id: paymentDetails.orderId,
         razorpay_payment_id: paymentDetails.paymentId,
         razorpay_signature: paymentDetails.signature || 'simulated_sig',
+        customerName: paymentDetails.customerName || activeCustomer.name,
         customerEmail: paymentDetails.customerEmail || activeCustomer.email,
         purchasedItemIds: (paymentDetails.items || []).map(i => i.id)
       });
+      if (verifyRes && verifyRes.user) {
+        const syncedCustomer = {
+          ...activeCustomer,
+          ...verifyRes.user,
+          purchasedProducts: verifyRes.user.purchasedProducts || activeCustomer.purchasedProducts
+        };
+        setCurrentUser(syncedCustomer);
+        localStorage.setItem('hengyi_user', JSON.stringify(syncedCustomer));
+      }
     } catch (err) {
       console.warn('Payment verification sync to server failed:', err.message);
     }

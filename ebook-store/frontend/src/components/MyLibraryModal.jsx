@@ -9,6 +9,7 @@ import {
   ExternalLink,
   ShieldAlert
 } from 'lucide-react';
+import { downloadPlannerPdf } from '../utils/plannerGenerator';
 
 export default function MyLibraryModal({ 
   isOpen, 
@@ -113,9 +114,7 @@ export default function MyLibraryModal({
                     </button>
 
                     <button
-                      onClick={() => {
-                        alert(`Downloading high-resolution print PDF for: "${item.title}"`);
-                      }}
+                      onClick={() => downloadPlannerPdf(item)}
                       className="py-2 px-3 rounded-xl bg-white hover:bg-[#FAF4EE] border border-[#D8C7BA] text-[#4A3C35] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       title="Download PDF"
                     >

@@ -12,6 +12,7 @@ import {
   Layers,
   ArrowRight
 } from 'lucide-react';
+import { downloadPlannerPdf } from '../utils/plannerGenerator';
 
 export default function DashboardPage({ 
   currentUser,
@@ -229,7 +230,7 @@ export default function DashboardPage({
                           link.click();
                           document.body.removeChild(link);
                         } else {
-                          alert(`Downloading high-resolution print vector PDF: "${item.title}"`);
+                          downloadPlannerPdf(item);
                         }
                       }}
                       className="py-2.5 px-4 rounded-xl bg-white hover:bg-[#FAF4EE] border border-[#D5C2B4] text-[#3D302A] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
