@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: hengyi-ebook-backend
+    runtime: node
+    plan: free
+    rootDir: ebook-store/server
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        value: https://hengyi-ebook-store.pages.dev
+      - key: JWT_SECRET
+        value: hengyi_secret_jwt_token_key_change_me_2026
+      - key: MONGODB_URI
+        value: mongodb+srv://rsolanki9235_db_user:rsolanki923507@cluster0.bev8skv.mongodb.net/ebook_store?retryWrites=true&w=majority&appName=Cluster0
+      - key: MONGO_URI
+        value: mongodb+srv://rsolanki9235_db_user:rsolanki923507@cluster0.bev8skv.mongodb.net/ebook_store?retryWrites=true&w=majority&appName=Cluster0
+      - key: RAZORPAY_KEY_ID
+        value: rzp_test_placeholder
+      - key: RAZORPAY_KEY_SECRET
+        value: razorpay_secret_placeholder

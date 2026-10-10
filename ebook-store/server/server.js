@@ -15,9 +15,16 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
-// Middleware
+// Middleware: Permissive CORS for Cloudflare Pages and local dev
 app.use(cors({
-  origin: [CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:5173'],
+  origin: (origin, callback) => {
+    // Allow server-to-server requests, localhost, and any *.pages.dev deployment
+    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('.pages.dev') || origin === CLIENT_URL) {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '50mb' }));
