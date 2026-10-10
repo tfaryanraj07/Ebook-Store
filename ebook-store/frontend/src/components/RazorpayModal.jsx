@@ -114,7 +114,10 @@ export default function RazorpayModal({
       if (serverOrder && serverOrder.order && serverOrder.order.id) {
         generatedOrderId = serverOrder.order.id;
       }
-      if (serverOrder && serverOrder.keyId && serverOrder.keyId !== 'rzp_test_placeholder') {
+      // Prioritize explicit VITE_RAZORPAY_KEY_ID or fresh server key
+      if (import.meta.env.VITE_RAZORPAY_KEY_ID && import.meta.env.VITE_RAZORPAY_KEY_ID !== 'rzp_test_placeholder') {
+        activeKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+      } else if (serverOrder && serverOrder.keyId && serverOrder.keyId !== 'rzp_test_placeholder') {
         activeKey = serverOrder.keyId;
       }
     } catch (e) {
