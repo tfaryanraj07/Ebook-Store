@@ -1,6 +1,8 @@
 import { ALL_PRODUCTS, COUPONS } from '../data/products';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const rawEnvUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const cleanUrl = rawEnvUrl.replace(/\/+$/, '');
+const API_BASE_URL = cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
 
 // Helper for fetch with JSON and auth header
 async function request(endpoint, options = {}) {

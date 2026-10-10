@@ -30,8 +30,8 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Universal Health Check Route for Render, UptimeRobot, and Cloudflare
-app.get(['/health', '/api/health'], (req, res) => {
+// Universal Health Check Route for Render, UptimeRobot, and Cloudflare (responds to /, /health, /api/health)
+app.get(['/', '/health', '/api/health'], (req, res) => {
   res.status(200).json({
     status: 'ok',
     service: 'hengyi-ebook-store-api',
@@ -41,12 +41,12 @@ app.get(['/health', '/api/health'], (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/coupons', couponRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/orders', orderRoutes);
+// API Routes - Mounted on both /api/xxx and /xxx to handle any frontend base URL configuration
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/products', '/products'], productRoutes);
+app.use(['/api/coupons', '/coupons'], couponRoutes);
+app.use(['/api/payments', '/payments'], paymentRoutes);
+app.use(['/api/orders', '/orders'], orderRoutes);
 
 // 404 Handler
 app.use((req, res) => {
