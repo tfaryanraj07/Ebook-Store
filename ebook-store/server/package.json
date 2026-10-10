@@ -1,0 +1,22 @@
+{
+  "name": "hengyi-ebook-store-backend",
+  "version": "1.0.0",
+  "description": "Production Node.js, Express, MongoDB Atlas, and Razorpay backend for Hengyi Digital Planner Studio",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ebook-store-workspace": "file:../..",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "razorpay": "^2.9.5"
+  }
+}

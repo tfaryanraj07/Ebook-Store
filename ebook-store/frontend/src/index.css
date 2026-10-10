@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  }
+  
+  body {
+    background-color: #FAF7F2;
+    color: #242120;
+    overflow-x: hidden;
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* High impact display fonts from reference image 2 */
+.font-display {
+  font-family: 'Bebas Neue', 'Syne', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+
+.font-editorial {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-hand {
+  font-family: 'Caveat', cursive;
+}
+
+/* Base sans-serif is Outfit matching Image 2 */
+.font-sans {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+/* 3D Angled Perspective transform for interactive mockup */
+.perspective-mockup {
+  perspective: 1200px;
+}
+
+.tilt-3d {
+  transform: rotateX(16deg) rotateY(-18deg) rotateZ(8deg);
+  box-shadow: 
+    -20px 30px 60px -10px rgba(30, 20, 15, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.4);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
+}
+
+.tilt-3d:hover {
+  transform: rotateX(10deg) rotateY(-10deg) rotateZ(4deg) scale(1.02);
+  box-shadow: 
+    -25px 40px 70px -10px rgba(30, 20, 15, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8CCC4;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #BFAFA5;
+}
+
+/* Noise overlay */
+.bg-subtle-noise {
+  background-image: radial-gradient(rgba(180, 150, 140, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}

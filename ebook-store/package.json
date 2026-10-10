@@ -1,0 +1,23 @@
+{
+  "name": "hengyi-ebook-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "恒一 Hengyi Digital Planner Studio - Full Stack Store with Express, MongoDB Atlas, Razorpay & React Vite",
+  "scripts": {
+    "server": "npm --prefix server run dev",
+    "server:start": "npm --prefix server start",
+    "frontend": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "seed": "npm --prefix server run seed",
+    "install:all": "npm --prefix server install && npm --prefix frontend install"
+  },
+  "keywords": [
+    "hengyi",
+    "digital-planner",
+    "razorpay",
+    "mongodb",
+    "express",
+    "react",
+    "tailwind"
+  ]
+}
