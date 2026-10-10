@@ -99,6 +99,7 @@ export default function RazorpayModal({
     setStatusMessage('Connecting to Razorpay gateway...');
 
     let generatedOrderId = `rzp_order_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+    let activeKey = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
 
     // 1. Create order on backend if available
     try {
@@ -113,17 +114,21 @@ export default function RazorpayModal({
       if (serverOrder && serverOrder.order && serverOrder.order.id) {
         generatedOrderId = serverOrder.order.id;
       }
+      if (serverOrder && serverOrder.keyId && serverOrder.keyId !== 'rzp_test_placeholder') {
+        activeKey = serverOrder.keyId;
+      }
     } catch (e) {
       console.warn('Backend Razorpay order creation notice:', e.message);
     }
 
-    // 2. Load Razorpay Checkout SDK
-    const isLoaded = await loadRazorpayScript();
+    // 2. Load Razorpay Checkout SDK if a genuine rzp_test key is provided
+    const isRealKey = activeKey && activeKey.startsWith('rzp_test_') && activeKey !== 'rzp_test_placeholder';
+    const isLoaded = isRealKey ? await loadRazorpayScript() : false;
 
-    if (isLoaded && window.Razorpay) {
+    if (isRealKey && isLoaded && window.Razorpay) {
       try {
         const options = {
-          key: 'rzp_test_placeholder', // Replaced with user's actual Razorpay key in next step
+          key: activeKey,
           amount: totalAmount * 100, // Amount in paise
           currency: 'INR',
           name: '恒一 Hengyi Digital Studio',
