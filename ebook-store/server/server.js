@@ -45,7 +45,7 @@ app.get(['/', '/health', '/api/health'], (req, res) => {
 app.use(['/api/auth', '/auth'], authRoutes);
 app.use(['/api/products', '/products'], productRoutes);
 app.use(['/api/coupons', '/coupons'], couponRoutes);
-app.use(['/api/payments', '/payments'], paymentRoutes);
+app.use(['/api/payments', '/payments', '/api', ''], paymentRoutes);
 app.use(['/api/orders', '/orders'], orderRoutes);
 
 // 404 Handler
