@@ -29,7 +29,7 @@ export default function Hero({
   };
 
   return (
-    <section className="relative pt-28 md:pt-36 pb-16 md:pb-24 overflow-hidden font-sans">
+    <section className="relative pt-32 sm:pt-36 md:pt-40 pb-16 md:pb-24 overflow-hidden font-sans">
       {/* Background Ambience: Warm Nude & Soft Peach Marble tint */}
       <div className="absolute top-0 inset-x-0 h-[680px] bg-gradient-to-b from-[#F5EAE1] via-[#F8EFE7] to-transparent pointer-events-none -z-10" />
       <div className="absolute top-10 left-1/3 -translate-x-1/2 w-[600px] h-[350px] bg-[#EBD8CC]/40 rounded-full blur-3xl pointer-events-none -z-10" />
@@ -48,7 +48,7 @@ export default function Hero({
 
               {/* Massive 3D Display Headline matching Image 2 "A HOT MESS" */}
               <h1 
-                className="font-display text-6xl sm:text-7xl lg:text-8xl text-[#241E1C] uppercase leading-[0.88] tracking-tight select-none"
+                className="font-display text-5xl sm:text-7xl lg:text-8xl text-[#241E1C] uppercase leading-[0.88] tracking-tight select-none"
                 style={{
                   textShadow: '3px 4px 0px #DFCCBF, 6px 7px 0px rgba(60, 45, 38, 0.12)'
                 }}

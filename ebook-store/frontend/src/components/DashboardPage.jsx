@@ -38,35 +38,35 @@ export default function DashboardPage({
     <div className="min-h-screen bg-[#FAF7F2] font-sans pb-20">
       
       {/* 1. Dashboard User Greeting Ribbon */}
-      <div className="pt-28 md:pt-32 pb-8 bg-gradient-to-b from-[#F7EFE9] via-[#FAF5F0] to-[#FAF7F2] border-b border-[#EADBCE]">
+      <div className="pt-32 sm:pt-36 md:pt-40 pb-8 bg-gradient-to-b from-[#F7EFE9] via-[#FAF5F0] to-[#FAF7F2] border-b border-[#EADBCE]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFE3D8] text-[#635147] text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Active Member Account</span>
-                <span>•</span>
-                <span className="font-mono">{currentUser?.email || 'customer@hengyi.studio'}</span>
+            <div className="space-y-1.5 max-w-2xl">
+              <div className="inline-flex max-w-full flex-wrap items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-2xl sm:rounded-full bg-[#EFE3D8] text-[#635147] text-[11px] sm:text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                <span className="shrink-0">Active Member Account</span>
+                <span className="text-[#A8988F] shrink-0">•</span>
+                <span className="font-mono truncate max-w-[180px] sm:max-w-xs text-[#4F3F37]">{currentUser?.email || 'customer@plenvi.com'}</span>
               </div>
-              <h1 className="font-syne text-3xl sm:text-4xl font-extrabold text-[#241E1C]">
+              <h1 className="font-syne text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#241E1C] leading-tight tracking-tight pt-1 break-words">
                 Welcome to your Dashboard, {currentUser?.name || 'Member'}
               </h1>
-              <p className="text-xs sm:text-sm text-[#7D6B60]">
+              <p className="text-xs sm:text-sm text-[#7D6B60] leading-relaxed">
                 Access your licensed digital library, browse the 40-planner collection, and download your templates.
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto pt-2 md:pt-0">
               <button
                 onClick={onViewLandingPage}
-                className="px-4 py-2 rounded-full bg-white border border-[#D5C2B4] hover:bg-[#FAF4EE] text-[#4A3A32] text-xs font-semibold transition-colors cursor-pointer"
+                className="flex-1 sm:flex-initial px-4 py-2 rounded-full bg-white border border-[#D5C2B4] hover:bg-[#FAF4EE] text-[#4A3A32] text-xs font-semibold transition-colors cursor-pointer text-center whitespace-nowrap"
               >
-                View Public Landing Page
+                Store Landing
               </button>
               <button
                 onClick={onSignOut}
-                className="px-4 py-2 rounded-full bg-[#FCEBE8] hover:bg-[#F9D6D0] text-[#B24B3B] text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-[#F3C4BC] shadow-xs"
+                className="px-4 py-2 rounded-full bg-[#FCEBE8] hover:bg-[#F9D6D0] text-[#B24B3B] text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-[#F3C4BC] shadow-xs whitespace-nowrap"
                 title="Logout of Account"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#B24B3B]" />
@@ -77,7 +77,7 @@ export default function DashboardPage({
           </div>
 
           {/* Quick Dashboard Stat Counters */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mt-6">
             <div className="bg-white p-4 rounded-2xl border border-[#E7DFD5] shadow-xs flex items-center gap-3.5">
               <div className="p-3 rounded-xl bg-[#F5EAE1] text-[#8E6E60]">
                 <BookOpen className="w-5 h-5" />

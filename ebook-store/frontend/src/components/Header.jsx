@@ -76,23 +76,23 @@ export default function Header({
         {/* Top Announcement Bar */}
         <div 
           className={`overflow-hidden transition-all duration-300 ${
-            isScrolled ? 'max-h-0 opacity-0 -translate-y-2' : 'max-h-12 opacity-100 mb-2'
+            isScrolled ? 'max-h-0 opacity-0 -translate-y-2' : 'max-h-12 opacity-100 mb-1.5'
           }`}
         >
-          <div className="max-w-7xl mx-auto px-4 text-center">
-            <div className="inline-flex items-center gap-2 py-1 px-3.5 rounded-full bg-[#EFE3D8]/80 border border-[#E4D5C8] text-[#5A4841] text-[11px] md:text-xs">
-              <span className="flex h-2 w-2 rounded-full bg-[#B88E7D] animate-ping" />
-              <span className="font-semibold text-[#8B6B5D]">Launch Special:</span>
-              <span>All 40 Planners at Flat <strong>₹49</strong> (Reg. ₹499) • Use code <strong className="font-mono text-[#78594C]">BUNDLE50</strong></span>
+          <div className="max-w-7xl mx-auto px-2 sm:px-4 text-center">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 py-1 px-3 sm:px-3.5 rounded-full bg-[#EFE3D8]/90 border border-[#E4D5C8] text-[#5A4841] text-[10px] sm:text-[11px] md:text-xs max-w-full">
+              <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#B88E7D] animate-ping shrink-0" />
+              <span className="font-semibold text-[#8B6B5D] shrink-0">Launch Special:</span>
+              <span className="truncate">All Planners Flat <strong>₹49</strong> (Reg. ₹499) • Code <strong className="font-mono text-[#78594C]">BUNDLE50</strong></span>
             </div>
           </div>
         </div>
 
         {/* Main Navigation Bar */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex items-center justify-between gap-2">
           
           {/* Brand Logo */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0 min-w-0">
             <button 
               onClick={() => {
                 if (currentUser) {
@@ -102,22 +102,20 @@ export default function Header({
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="text-left group cursor-pointer"
+              className="text-left group cursor-pointer flex items-center gap-2 sm:gap-2.5"
             >
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/plenvi-logo.jpg" 
-                  alt="Plenvi Logo" 
-                  className="w-9 h-9 md:w-10 md:h-10 rounded-xl object-contain shadow-xs border border-[#E8DFD6]"
-                />
-                <div>
-                  <span className="font-syne text-xl md:text-2xl font-extrabold tracking-wider text-[#241E1C] group-hover:text-[#8E6E60] transition-colors block leading-tight">
-                    Plenvi
-                  </span>
-                  <p className="text-[9px] md:text-[10px] text-[#8C7A70] tracking-widest uppercase font-semibold">
-                    Digital Planners Studio
-                  </p>
-                </div>
+              <img 
+                src="/plenvi-logo.jpg" 
+                alt="Plenvi Logo" 
+                className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl object-contain shadow-xs border border-[#E8DFD6] shrink-0"
+              />
+              <div className="min-w-0">
+                <span className="font-syne text-lg sm:text-xl md:text-2xl font-extrabold tracking-wider text-[#241E1C] group-hover:text-[#8E6E60] transition-colors block leading-tight truncate">
+                  Plenvi
+                </span>
+                <p className="text-[8px] sm:text-[9px] md:text-[10px] text-[#8C7A70] tracking-widest uppercase font-semibold hidden xs:block truncate">
+                  Digital Planners Studio
+                </p>
               </div>
             </button>
           </div>
@@ -192,25 +190,25 @@ export default function Header({
           )}
 
           {/* Right Utilities & Actions */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             
             {/* Search (Available in Dashboard) */}
             {currentView === 'dashboard' && (
               <div className="relative">
                 {searchOpen ? (
-                  <div className="flex items-center bg-white border border-[#D8C7BB] rounded-full px-3 py-1 shadow-sm">
-                    <Search className="w-3.5 h-3.5 text-[#9A897F] mr-2" />
+                  <div className="fixed inset-x-3 top-16 md:static md:inset-auto z-50 md:z-auto flex items-center bg-white border border-[#D8C7BB] rounded-full px-3.5 py-1.5 md:py-1 shadow-lg md:shadow-sm">
+                    <Search className="w-3.5 h-3.5 text-[#9A897F] mr-2 shrink-0" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search 40 products..."
+                      placeholder="Search 40 planners..."
                       autoFocus
-                      className="w-32 md:w-44 text-xs bg-transparent focus:outline-none text-[#2D2622]"
+                      className="w-full md:w-44 text-xs bg-transparent focus:outline-none text-[#2D2622]"
                     />
                     <button 
                       onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
-                      className="text-[#9A897F] hover:text-[#2D2622] ml-1"
+                      className="text-[#9A897F] hover:text-[#2D2622] ml-1 p-1 shrink-0"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -218,7 +216,7 @@ export default function Header({
                 ) : (
                   <button
                     onClick={() => setSearchOpen(true)}
-                    className="p-2 rounded-full hover:bg-[#EFE4DA]/70 text-[#54433C] transition-colors cursor-pointer"
+                    className="p-2 rounded-full hover:bg-[#EFE4DA]/70 text-[#54433C] transition-colors cursor-pointer shrink-0"
                     title="Search products"
                   >
                     <Search className="w-4 h-4" />
@@ -233,13 +231,13 @@ export default function Header({
                 {currentView === 'landing' ? (
                   <button
                     onClick={() => onNavigateView('dashboard')}
-                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#241E1C] text-white text-xs font-semibold shadow-xs hover:bg-[#3D332F] transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#241E1C] text-white text-xs font-semibold shadow-xs hover:bg-[#3D332F] transition-all cursor-pointer"
                   >
                     <LayoutDashboard className="w-3.5 h-3.5 text-[#D8B4A4]" />
-                    <span>Go to Dashboard</span>
+                    <span className="hidden sm:inline">Dashboard</span>
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2">
+                  <div className="hidden lg:flex items-center gap-2">
                     <div className="flex items-center gap-1.5 bg-white border border-[#D8C7BA] rounded-full px-3 py-1.5 text-xs shadow-xs">
                       <User className="w-3.5 h-3.5 text-[#8E6E60]" />
                       <span className="font-bold text-[#29221F] truncate max-w-[120px]">{currentUser.name}</span>
@@ -256,16 +254,16 @@ export default function Header({
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1 sm:gap-1.5">
                 <button
                   onClick={onOpenSignIn}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#4A3C35] hover:text-[#241E1C] hover:bg-[#EFE4DA]/60 transition-colors cursor-pointer"
+                  className="px-2.5 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#4A3C35] hover:text-[#241E1C] hover:bg-[#EFE4DA]/60 transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={onOpenSignUp}
-                  className="px-4 py-1.5 rounded-full text-xs font-semibold bg-[#241E1C] hover:bg-[#3D332F] text-white shadow-xs transition-all cursor-pointer"
+                  className="px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold bg-[#241E1C] hover:bg-[#3D332F] text-white shadow-xs transition-all cursor-pointer"
                 >
                   Sign Up
                 </button>
@@ -307,11 +305,11 @@ export default function Header({
             {(currentView === 'dashboard' || cartCount > 0) && (
               <button
                 onClick={onOpenCart}
-                className="relative flex items-center gap-2 bg-[#2D2622] hover:bg-[#433934] text-white px-3.5 md:px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                className="relative flex items-center gap-1.5 sm:gap-2 bg-[#2D2622] hover:bg-[#433934] text-white px-2.5 sm:px-3.5 md:px-4 py-1.5 sm:py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group shrink-0"
               >
-                <ShoppingBag className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-semibold hidden xs:inline">Cart</span>
-                <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-[#C49B89] text-[#1E1917] text-[11px] font-bold">
+                <span className="flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-4.5 sm:h-5 px-1 sm:px-1.5 rounded-full bg-[#C49B89] text-[#1E1917] text-[10px] sm:text-[11px] font-bold">
                   {cartCount}
                 </span>
               </button>
@@ -320,7 +318,8 @@ export default function Header({
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2 text-[#4D3F38] hover:bg-[#EFE4DA] rounded-lg cursor-pointer"
+              className="lg:hidden p-2 text-[#4D3F38] hover:bg-[#EFE4DA] rounded-lg cursor-pointer shrink-0"
+              aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -329,7 +328,7 @@ export default function Header({
 
         {/* Mobile Dropdown Menu */}
         {mobileMenuOpen && (
-          <div className="xl:hidden mt-3 px-4 pt-3 pb-4 bg-[#FAF5F0] border-t border-[#E8DFD6] space-y-3 font-sans">
+          <div className="lg:hidden mt-2 px-4 pt-3 pb-4 bg-[#FAF5F0] border-t border-[#E8DFD6] space-y-3 font-sans shadow-lg animate-in slide-in-from-top-2 duration-200">
             {/* Customer Auth in Mobile */}
             <div className="p-3 bg-white rounded-xl border border-[#E5D7CC] flex items-center justify-between">
               {currentUser ? (
