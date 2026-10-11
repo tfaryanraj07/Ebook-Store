@@ -217,7 +217,13 @@ export default function RazorpayModal({
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-semibold text-sm tracking-wide">Razorpay</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/20 font-mono text-cyan-200">TEST MODE</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
+                  (import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_')
+                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40'
+                    : 'bg-white/20 text-cyan-200'
+                }`}>
+                  {(import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_') ? 'LIVE PRODUCTION' : 'TEST MODE'}
+                </span>
               </div>
               <p className="text-[11px] text-white/70">
                 恒一 HENGYI Digital Studio • Order #{Math.floor(100000 + Math.random() * 900000)}
@@ -481,7 +487,11 @@ export default function RazorpayModal({
             {/* Trust Footer */}
             <div className="flex items-center justify-center gap-2 text-[10px] text-[#778899]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#3395FF]" />
-              <span>Razorpay Verified • Test Sandbox Mode</span>
+              <span>
+                {(import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_')
+                  ? 'Razorpay Official • 256-bit SSL Secure Live Payment'
+                  : 'Razorpay Verified • Test Sandbox Mode'}
+              </span>
             </div>
 
           </div>
