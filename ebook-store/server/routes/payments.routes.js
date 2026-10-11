@@ -88,7 +88,7 @@ router.post('/create-order', async (req, res) => {
 
     // Save preliminary order into MongoDB
     const localOrder = await Order.create({
-      orderId: `hengyi_${Date.now()}`,
+      orderId: `plenvi_${Date.now()}`,
       razorpayOrderId: razorpayOrder.id,
       customerEmail: customerEmail || 'guest@example.com',
       customerPhone: customerPhone || '',
@@ -179,7 +179,7 @@ router.post('/verify-payment', async (req, res) => {
         // Customer paid as guest: automatically provision customer record so they keep their purchases!
         try {
           const bcrypt = require('bcryptjs');
-          const randomPassword = `Hengyi@${Math.floor(1000 + Math.random() * 9000)}`;
+          const randomPassword = `Plenvi@${Math.floor(1000 + Math.random() * 9000)}`;
           const hashedPassword = await bcrypt.hash(randomPassword, 10);
           updatedUser = await User.create({
             name: customerName || emailToUse.split('@')[0],

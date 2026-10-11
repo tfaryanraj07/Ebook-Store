@@ -78,7 +78,7 @@ export default function RazorpayModal({
         signature: signature || 'razorpay_verified_signature_token',
         amount: totalAmount,
         customerName: customerName.trim() || currentUser?.name || 'Customer',
-        customerEmail: customerEmail.trim() || currentUser?.email || 'customer@hengyi.studio',
+        customerEmail: customerEmail.trim() || currentUser?.email || 'customer@plenvi.com',
         customerPhone: customerPhone.trim(),
         items: orderData.cartItems,
         date: new Date().toISOString()
@@ -133,12 +133,12 @@ export default function RazorpayModal({
           key: activeKey,
           amount: totalAmount * 100, // Amount in paise
           currency: 'INR',
-          name: '恒一 Hengyi Digital Studio',
+          name: 'Plenvi Digital Studio',
           description: `${orderData.cartItems?.length || 1} Digital Planners`,
-          image: 'https://cdn-icons-png.flaticon.com/512/3145/3145765.png',
+          image: '/plenvi-logo.jpg',
           prefill: {
             name: customerName.trim() || currentUser?.name || 'Customer',
-            email: customerEmail.trim() || currentUser?.email || 'customer@hengyi.studio',
+            email: customerEmail.trim() || currentUser?.email || 'customer@plenvi.com',
             contact: customerPhone.trim() || '9876543210'
           },
           notes: {
@@ -223,7 +223,7 @@ export default function RazorpayModal({
                 </span>
               </div>
               <p className="text-[11px] text-slate-300 font-normal">
-                恒一 HENGYI Digital Studio • Order #{Math.floor(100000 + Math.random() * 900000)}
+                Plenvi Digital Studio • Order #{Math.floor(100000 + Math.random() * 900000)}
               </p>
             </div>
           </div>

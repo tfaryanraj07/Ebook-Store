@@ -104,18 +104,21 @@ export default function Header({
               }}
               className="text-left group cursor-pointer"
             >
-              <div className="flex items-center gap-2">
-                <span className="font-syne text-2xl md:text-3xl font-extrabold tracking-wider text-[#241E1C] group-hover:text-[#8E6E60] transition-colors">
-                  恒一
-                </span>
-                <div className="h-4 w-[1px] bg-[#D4C3B7]"></div>
-                <span className="text-xs md:text-sm uppercase tracking-widest font-sans font-bold text-[#5A4841]">
-                  Hengyi Studio
-                </span>
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/plenvi-logo.jpg" 
+                  alt="Plenvi Logo" 
+                  className="w-9 h-9 md:w-10 md:h-10 rounded-xl object-contain shadow-xs border border-[#E8DFD6]"
+                />
+                <div>
+                  <span className="font-syne text-xl md:text-2xl font-extrabold tracking-wider text-[#241E1C] group-hover:text-[#8E6E60] transition-colors block leading-tight">
+                    Plenvi
+                  </span>
+                  <p className="text-[9px] md:text-[10px] text-[#8C7A70] tracking-widest uppercase font-semibold">
+                    Digital Planners Studio
+                  </p>
+                </div>
               </div>
-              <p className="text-[10px] text-[#8C7A70] tracking-wider uppercase hidden sm:block font-medium">
-                Digital Planners • Journals • Trackers
-              </p>
             </button>
           </div>
 

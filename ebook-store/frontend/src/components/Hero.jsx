@@ -227,7 +227,7 @@ export default function Hero({
               <div className="mt-4 flex items-center justify-between text-xs text-[#52443C] px-2 font-sans">
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#8A766B] block">DIGITAL ARCHITECTURE</span>
-                  <p className="font-syne font-bold text-sm text-[#27201D]">恒一 40-Template Omni System</p>
+                  <p className="font-syne font-bold text-sm text-[#27201D]">Plenvi 40-Template Omni System</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={onOpenReader} className="hover:text-[#27201D] transition-colors" title="Launch Reader">

@@ -71,7 +71,7 @@ mongoose.connect(mongoUri)
 
 app.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`🚀 恒一 Hengyi Backend Server running on port ${PORT}`);
+  console.log(`🚀 Plenvi Backend Server running on port ${PORT}`);
   console.log(`📡 API Base URL: http://localhost:${PORT}/api`);
   console.log(`💳 Razorpay Key: ${process.env.RAZORPAY_KEY_ID ? 'Loaded' : 'Placeholder'}`);
   console.log(`======================================================\n`);

@@ -90,14 +90,20 @@ export default function Footer({ onSelectCategory, onSelectProduct, products = [
           
           {/* Brand Info */}
           <div className="md:col-span-4 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="font-serif text-3xl font-semibold text-white tracking-wider">
-                恒一
-              </span>
-              <div className="h-5 w-[1px] bg-[#423731]"></div>
-              <span className="text-xs uppercase tracking-widest font-semibold text-[#D4B2A3]">
-                Hengyi Studio
-              </span>
+            <div className="flex items-center gap-3">
+              <img 
+                src="/plenvi-logo.jpg" 
+                alt="Plenvi Logo" 
+                className="w-10 h-10 rounded-xl object-contain shadow-xs border border-[#382F2A]"
+              />
+              <div>
+                <span className="font-serif text-2xl font-bold text-white tracking-wider block leading-tight">
+                  Plenvi
+                </span>
+                <p className="text-[10px] uppercase tracking-widest font-semibold text-[#D4B2A3]">
+                  Digital Planners Studio
+                </p>
+              </div>
             </div>
 
             <p className="text-xs text-[#A8988F] leading-relaxed max-w-sm">
@@ -173,7 +179,7 @@ export default function Footer({ onSelectCategory, onSelectProduct, products = [
 
         {/* Bottom Copyright & Disclaimer */}
         <div className="pt-8 border-t border-[#241D1A] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#7A6960]">
-          <p>© 2026 恒一 HENGYI Digital Studio. All rights reserved.</p>
+          <p>© 2026 Plenvi Digital Studio. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
             <span className="hover:text-white transition-colors cursor-pointer">Terms of Digital Service</span>

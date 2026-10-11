@@ -53,7 +53,7 @@ export default function ReaderModal({ product, onClose, onAddToCart, isInCart })
             </style>
           </head>
           <body>
-            <h1>恒一 HENGYI STUDIO — ${product.title}</h1>
+            <h1>Plenvi Studio — ${product.title}</h1>
             <p>Format: ${product.format} | 31-Day Printable Template</p>
             <div class="box">
               <h3>Weekly Routine & Habit Audit</h3>
@@ -404,7 +404,7 @@ export default function ReaderModal({ product, onClose, onAddToCart, isInCart })
                     </div>
 
                     <div className="border border-[#E2D5C8] rounded-xl p-3 bg-white text-xs font-serif italic text-center text-[#68574F]">
-                      恒一 HENGYI Mindfulness Collection • 100% Digital Download
+                      Plenvi Mindfulness Collection • 100% Digital Download
                     </div>
                   </div>
                 )}

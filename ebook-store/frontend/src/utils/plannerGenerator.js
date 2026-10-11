@@ -18,7 +18,7 @@ export function downloadPlannerPdf(product) {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>${title} — 恒一 HENGYI STUDIO</title>
+  <title>${title} — Plenvi Studio</title>
   <style>
     @page {
       size: A4 portrait;
@@ -166,7 +166,7 @@ export function downloadPlannerPdf(product) {
 <body>
   <div class="header">
     <div>
-      <div class="brand">恒一 HENGYI DIGITAL STUDIO</div>
+      <div class="brand">PLENVI DIGITAL STUDIO</div>
       <h1>${title}</h1>
       <div class="meta">${desc} • Format: ${format}</div>
     </div>
@@ -231,7 +231,7 @@ export function downloadPlannerPdf(product) {
   </div>
 
   <div class="footer">
-    <div>恒一 Hengyi Digital Studio • Verified Customer License Key: HENGYI-${Date.now().toString().slice(-6)}</div>
+    <div>Plenvi Digital Studio • Verified Customer License Key: PLENVI-${Date.now().toString().slice(-6)}</div>
     <div>Page 1 of 1 • High-Resolution Vector Print Ready</div>
   </div>
 </body>

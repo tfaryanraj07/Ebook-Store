@@ -237,7 +237,7 @@ export default function AdminInventoryPage({
             <div>
               <div className="flex items-center gap-2.5">
                 <span className="font-syne text-2xl font-extrabold tracking-wide">
-                  恒一 Studio Inventory & Admin Center
+                  Plenvi Studio Inventory & Admin Center
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 text-[10px] font-mono border border-emerald-800">
                   FULL ACCESS

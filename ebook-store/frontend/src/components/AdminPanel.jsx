@@ -140,7 +140,7 @@ export default function AdminPanel({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="font-syne text-xl sm:text-2xl font-extrabold text-white">
-                  恒一 Admin Management Dashboard
+                  Plenvi Admin Management Dashboard
                 </h2>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-900/80 text-emerald-300 text-[10px] font-mono border border-emerald-600">
                   LIVE CONTROLS

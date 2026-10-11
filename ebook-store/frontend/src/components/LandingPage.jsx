@@ -38,7 +38,7 @@ export default function LandingPage({
         currentUser={null}
       />
 
-      {/* 2. Why Choose 恒一 System - Features Section */}
+      {/* 2. Why Choose Plenvi System - Features Section */}
       <section id="features-section" className="py-20 bg-[#FAF5F0] border-y border-[#EADBCE]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           
