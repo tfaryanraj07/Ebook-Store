@@ -3,9 +3,8 @@ import {
   X, 
   ShieldCheck, 
   KeyRound, 
-  ArrowRight, 
+  Mail, 
   Lock, 
-  CheckCircle2,
   AlertCircle
 } from 'lucide-react';
 import { apiAdminLogin } from '../services/api';
@@ -15,7 +14,8 @@ export default function AdminLoginModal({
   onClose, 
   onAdminLoginSuccess 
 }) {
-  const [adminKey, setAdminKey] = useState('admin123');
+  const [adminEmail, setAdminEmail] = useState('');
+  const [adminPasscode, setAdminPasscode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -25,24 +25,25 @@ export default function AdminLoginModal({
     e.preventDefault();
     setError('');
 
-    if (adminKey.trim() !== 'admin123' && adminKey.trim() !== 'admin') {
-      setError('Invalid admin key. (Hint: use "admin123" or click the 1-click button)');
+    const cleanEmail = adminEmail.trim().toLowerCase();
+    const cleanPasscode = adminPasscode.trim();
+
+    if (!cleanEmail || !cleanPasscode) {
+      setError('Please enter both admin email and security passcode.');
       return;
     }
 
     setLoading(true);
 
     try {
-      await apiAdminLogin(adminKey);
-    } catch (err) {
-      console.warn('Backend admin login attempt notice:', err.message);
-    }
-
-    setTimeout(() => {
+      await apiAdminLogin(cleanEmail, cleanPasscode);
       setLoading(false);
       onAdminLoginSuccess();
       onClose();
-    }, 400);
+    } catch (err) {
+      setLoading(false);
+      setError(err?.message || 'Invalid admin credentials. Access denied.');
+    }
   };
 
   return (
@@ -85,47 +86,45 @@ export default function AdminLoginModal({
 
             <div>
               <label className="block text-[11px] uppercase font-bold text-[#A69488] mb-1.5">
+                Admin Email
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-[#8C7A70] absolute left-3.5 top-3" />
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="Enter admin email address"
+                  required
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#453A35] bg-[#141211] text-white focus:outline-none focus:ring-1 focus:ring-[#D8B4A4] text-xs"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] uppercase font-bold text-[#A69488] mb-1.5">
                 Admin Security Passcode
               </label>
               <div className="relative">
                 <KeyRound className="w-4 h-4 text-[#8C7A70] absolute left-3.5 top-3" />
                 <input
                   type="password"
-                  value={adminKey}
-                  onChange={(e) => setAdminKey(e.target.value)}
-                  placeholder="Enter admin passcode"
+                  value={adminPasscode}
+                  onChange={(e) => setAdminPasscode(e.target.value)}
+                  placeholder="Enter security passcode"
+                  required
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#453A35] bg-[#141211] text-white focus:outline-none focus:ring-1 focus:ring-[#D8B4A4] font-mono text-xs"
                 />
               </div>
-              <p className="text-[10px] text-[#78665C] mt-1 font-sans">
-                Default key: <span className="font-mono text-[#D8B4A4]">admin123</span>
-              </p>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-full bg-[#E5D2C5] hover:bg-[#F3E3DA] text-[#241E1C] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+              className="w-full py-3 mt-2 rounded-full bg-[#E5D2C5] hover:bg-[#F3E3DA] text-[#241E1C] font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
             >
               <Lock className="w-4 h-4" />
               <span>{loading ? 'Verifying Access...' : 'Authenticate & Open Admin Page'}</span>
-            </button>
-
-            {/* 1-Click Demo Shortcut */}
-            <button
-              type="button"
-              onClick={() => {
-                setAdminKey('admin123');
-                setLoading(true);
-                setTimeout(() => {
-                  setLoading(false);
-                  onAdminLoginSuccess();
-                  onClose();
-                }, 400);
-              }}
-              className="w-full py-2.5 rounded-xl bg-[#2C2421] hover:bg-[#382E2A] text-[#D8B4A4] text-xs font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <span>⚡ 1-Click Direct Admin Access</span>
             </button>
           </form>
         </div>

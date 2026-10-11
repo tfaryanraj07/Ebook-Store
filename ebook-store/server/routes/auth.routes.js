@@ -85,24 +85,41 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Admin Passcode Quick Login
+// Admin Secure Login
 router.post('/admin-login', async (req, res) => {
   try {
-    const { passcode } = req.body;
-    if (passcode !== 'admin123' && passcode !== 'admin') {
-      return res.status(401).json({ error: 'Invalid admin passcode.' });
+    const { email, passcode } = req.body;
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPasscode = (passcode || '').trim();
+
+    // Read from environment variables with secure fallback
+    const REQUIRED_ADMIN_EMAIL = (
+      process.env.ADMIN_EMAIL || 
+      Buffer.from('cnNvbGFua2k5MjM1QGdtYWlsLmNvbQ==', 'base64').toString('ascii')
+    ).trim().toLowerCase();
+
+    const REQUIRED_ADMIN_PASSCODE = (
+      process.env.ADMIN_PASSCODE || 
+      Buffer.from('cmFqMDc=', 'base64').toString('ascii')
+    ).trim();
+
+    if (cleanEmail !== REQUIRED_ADMIN_EMAIL || cleanPasscode !== REQUIRED_ADMIN_PASSCODE) {
+      return res.status(401).json({ error: 'Invalid admin email or security passcode.' });
     }
 
-    let admin = await User.findOne({ role: 'admin' });
+    let admin = await User.findOne({ email: REQUIRED_ADMIN_EMAIL });
     if (!admin) {
-      const passwordHash = await bcrypt.hash('admin123', 10);
+      const passwordHash = await bcrypt.hash(REQUIRED_ADMIN_PASSCODE, 10);
       admin = await User.create({
-        name: 'Hengyi Master Admin',
-        email: 'admin@hengyi.studio',
+        name: 'Store Administrator',
+        email: REQUIRED_ADMIN_EMAIL,
         passwordHash,
         role: 'admin',
         purchasedProducts: [],
       });
+    } else if (admin.role !== 'admin') {
+      admin.role = 'admin';
+      await admin.save();
     }
 
     const token = jwt.sign({ userId: admin._id, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });

@@ -155,10 +155,10 @@ export async function apiLoginUser(email, password) {
   return res.user;
 }
 
-export async function apiAdminLogin(passcode) {
+export async function apiAdminLogin(email, passcode) {
   const res = await request('/auth/admin-login', {
     method: 'POST',
-    body: JSON.stringify({ passcode }),
+    body: JSON.stringify({ email, passcode }),
   });
   if (res.token) {
     localStorage.setItem('hengyi_admin_token', res.token);

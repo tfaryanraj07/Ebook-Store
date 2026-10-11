@@ -67,7 +67,7 @@ export default function AdminInventoryPage({
   // Coupon Form State
   const [couponCode, setCouponCode] = useState('');
   const [couponDiscount, setCouponDiscount] = useState('25');
-  const [couponMinAmount, setCouponMinAmount] = useState('49');
+  const [couponMinAmount, setCouponMinAmount] = useState('0');
 
   // Toast Notification
   const showToast = (msg) => {
@@ -192,10 +192,11 @@ export default function AdminInventoryPage({
   const handleCreateCoupon = (e) => {
     e.preventDefault();
     if (!couponCode.trim()) return;
+    const minParsed = couponMinAmount !== '' ? Number(couponMinAmount) : 0;
     const newC = {
       code: couponCode.trim().toUpperCase(),
       discountPercent: Number(couponDiscount) || 20,
-      minAmount: Number(couponMinAmount) || 49,
+      minAmount: isNaN(minParsed) ? 0 : Math.max(0, minParsed),
       description: `${couponDiscount}% OFF Promo Discount`
     };
     onAddCoupon(newC);
@@ -920,12 +921,14 @@ export default function AdminInventoryPage({
 
                 <div>
                   <label className="block text-xs font-bold text-[#4D3F37] uppercase tracking-wider mb-2">
-                    Minimum Cart Spend (₹)
+                    Minimum Cart Spend (₹) — Set 0 for All Products
                   </label>
                   <input
                     type="number"
+                    min="0"
                     value={couponMinAmount}
                     onChange={(e) => setCouponMinAmount(e.target.value)}
+                    placeholder="0 (applies to all products)"
                     className="w-full px-4 py-2.5 rounded-xl bg-[#FAF7F3] border border-[#DACBC0] text-xs font-bold text-[#241E1C] focus:outline-none"
                   />
                 </div>

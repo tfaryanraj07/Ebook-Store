@@ -541,6 +541,7 @@ export default function App() {
         cartItems={cartItems}
         onRemoveItem={handleRemoveFromCart}
         onCheckout={handleInitiateCheckout}
+        coupons={coupons}
         appliedCoupon={appliedCoupon}
         setAppliedCoupon={setAppliedCoupon}
       />

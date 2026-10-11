@@ -18,6 +18,7 @@ export default function CartDrawer({
   onUpdateQuantity, 
   onRemoveItem, 
   onCheckout,
+  coupons = [],
   appliedCoupon,
   setAppliedCoupon 
 }) {
@@ -32,9 +33,9 @@ export default function CartDrawer({
   let discount = 0;
   if (appliedCoupon) {
     if (appliedCoupon.discountPercent) {
-      discount = Math.round((subtotal * appliedCoupon.discountPercent) / 100);
+      discount = Math.round((subtotal * Number(appliedCoupon.discountPercent)) / 100);
     } else if (appliedCoupon.discountFlat) {
-      discount = appliedCoupon.discountFlat;
+      discount = Number(appliedCoupon.discountFlat);
     }
   }
 
@@ -44,15 +45,26 @@ export default function CartDrawer({
     e.preventDefault();
     setCouponError('');
     const code = couponInput.trim().toUpperCase();
-    const found = COUPONS.find(c => c.code === code);
+    if (!code) return;
+
+    // Search across dynamic admin coupons and default fallback coupons
+    const poolMap = new Map();
+    (COUPONS || []).forEach(c => {
+      if (c && c.code) poolMap.set(c.code.toUpperCase(), c);
+    });
+    (Array.isArray(coupons) ? coupons : []).forEach(c => {
+      if (c && c.code) poolMap.set(c.code.toUpperCase(), c);
+    });
+    const found = poolMap.get(code);
     
     if (!found) {
-      setCouponError('Invalid coupon code. Try BUNDLE50 or WELCOME20.');
+      setCouponError(`Coupon "${code}" is invalid or expired.`);
       return;
     }
 
-    if (found.minAmount && subtotal < found.minAmount) {
-      setCouponError(`Min order amount ₹${found.minAmount} required for this coupon.`);
+    const minSpend = Number(found.minAmount) || 0;
+    if (minSpend > 0 && subtotal < minSpend) {
+      setCouponError(`Min order amount ₹${minSpend} required for this coupon.`);
       return;
     }
 

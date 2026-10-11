@@ -209,23 +209,20 @@ export default function RazorpayModal({
       <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden border border-[#D5C2B4] flex flex-col animate-in zoom-in-95 duration-200">
         
         {/* Razorpay Brand Header */}
-        <div className="bg-[#0C2340] text-white p-4 sm:p-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#3395FF] flex items-center justify-center font-bold text-white text-sm">
+        <div className="bg-gradient-to-r from-[#0C2340] to-[#123157] text-white p-4 sm:p-5 flex items-center justify-between shadow-xs">
+          <div className="flex items-center gap-3.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#3395FF] to-[#1B75D0] flex items-center justify-center font-bold text-white text-base shadow-sm">
               ₹
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <span className="font-semibold text-sm tracking-wide">Razorpay</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${
-                  (import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_')
-                    ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40'
-                    : 'bg-white/20 text-cyan-200'
-                }`}>
-                  {(import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_') ? 'LIVE PRODUCTION' : 'TEST MODE'}
+                <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-medium">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  100% SECURE
                 </span>
               </div>
-              <p className="text-[11px] text-white/70">
+              <p className="text-[11px] text-slate-300 font-normal">
                 恒一 HENGYI Digital Studio • Order #{Math.floor(100000 + Math.random() * 900000)}
               </p>
             </div>
@@ -234,21 +231,27 @@ export default function RazorpayModal({
           <button
             onClick={onClose}
             disabled={isProcessing}
-            className="p-1.5 rounded-full hover:bg-white/10 text-white/80 transition-colors cursor-pointer"
+            className="p-2 rounded-full hover:bg-white/10 text-white/80 transition-colors cursor-pointer"
+            aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Amount Ribbon */}
-        <div className="bg-[#F0F5FA] px-5 py-3 border-b border-[#D8E4F0] flex items-center justify-between text-xs text-[#204060]">
+        <div className="bg-[#F8FAFC] px-5 sm:px-6 py-3.5 border-b border-slate-200/80 flex items-center justify-between text-xs">
           <div>
-            <span className="text-[#557799] block text-[10px] uppercase font-semibold">PAYABLE AMOUNT</span>
+            <span className="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">TOTAL PAYABLE</span>
             <span className="font-serif text-2xl font-bold text-[#0C2340]">₹{totalAmount}.00</span>
           </div>
-          <div className="text-right text-[11px] text-[#557799]">
-            <span>{orderData.cartItems?.length || 1} Digital Planners</span>
-            <span className="block font-medium text-emerald-700">Instant Digital Library Delivery</span>
+          <div className="text-right">
+            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-800 text-[11px] font-medium">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              <span>Instant Digital Delivery</span>
+            </div>
+            <p className="text-[10px] text-slate-400 mt-0.5">
+              {orderData.cartItems?.length || 1} Digital {orderData.cartItems?.length === 1 ? 'Product' : 'Products'} • Direct PDF Access
+            </p>
           </div>
         </div>
 
@@ -274,75 +277,76 @@ export default function RazorpayModal({
             
             {/* Error Message if any */}
             {errorMessage && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
-                {errorMessage}
+              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
+                <span>{errorMessage}</span>
               </div>
             )}
 
-            {/* Customer Details Form (Clean with placeholders) */}
+            {/* Customer Details Form */}
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-[10px] uppercase font-bold text-[#556677] mb-1">
+                <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">
                   Customer Full Name
                 </label>
                 <div className="relative">
-                  <User className="w-3.5 h-3.5 text-[#8899A6] absolute left-3 top-3 pointer-events-none" />
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
                   <input
                     type="text"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Enter your full name"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#CCD8E5] focus:outline-none focus:ring-1 focus:ring-[#3395FF] text-xs text-[#0C2340]"
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] text-xs text-slate-800 placeholder:text-slate-400 transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] uppercase font-bold text-[#556677] mb-1">
+                  <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">
                     Email Address (For PDF Delivery) *
                   </label>
                   <div className="relative">
-                    <Mail className="w-3.5 h-3.5 text-[#8899A6] absolute left-3 top-3 pointer-events-none" />
+                    <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
                     <input
                       type="email"
                       required
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
                       placeholder="Enter your email address"
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#CCD8E5] focus:outline-none focus:ring-1 focus:ring-[#3395FF] text-xs text-[#0C2340]"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] text-xs text-slate-800 placeholder:text-slate-400 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] uppercase font-bold text-[#556677] mb-1">
+                  <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">
                     Phone (SMS Notification)
                   </label>
                   <div className="relative">
-                    <Phone className="w-3.5 h-3.5 text-[#8899A6] absolute left-3 top-3 pointer-events-none" />
+                    <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
                     <input
                       type="tel"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="Enter 10-digit mobile number"
-                      className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#CCD8E5] focus:outline-none focus:ring-1 focus:ring-[#3395FF] text-xs text-[#0C2340]"
+                      className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] text-xs text-slate-800 placeholder:text-slate-400 transition-all"
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Payment Method Tabs */}
+            {/* Payment Method Segmented Tabs */}
             <div>
-              <div className="flex border-b border-[#E0E8F0] gap-2">
+              <div className="bg-slate-100/90 p-1 rounded-2xl flex gap-1">
                 <button
                   type="button"
                   onClick={() => setActiveTab('upi')}
-                  className={`pb-2.5 px-3 text-xs font-medium flex items-center gap-1.5 border-b-2 transition-colors cursor-pointer ${
+                  className={`flex-1 py-2 px-3 text-xs rounded-xl font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     activeTab === 'upi'
-                      ? 'border-[#3395FF] text-[#0C2340] font-semibold'
-                      : 'border-transparent text-[#778899] hover:text-[#0C2340]'
+                      ? 'bg-white text-[#0C2340] font-semibold shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" />
@@ -351,10 +355,10 @@ export default function RazorpayModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab('card')}
-                  className={`pb-2.5 px-3 text-xs font-medium flex items-center gap-1.5 border-b-2 transition-colors cursor-pointer ${
+                  className={`flex-1 py-2 px-3 text-xs rounded-xl font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     activeTab === 'card'
-                      ? 'border-[#3395FF] text-[#0C2340] font-semibold'
-                      : 'border-transparent text-[#778899] hover:text-[#0C2340]'
+                      ? 'bg-white text-[#0C2340] font-semibold shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
                   <CreditCard className="w-3.5 h-3.5" />
@@ -363,10 +367,10 @@ export default function RazorpayModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab('netbanking')}
-                  className={`pb-2.5 px-3 text-xs font-medium flex items-center gap-1.5 border-b-2 transition-colors cursor-pointer ${
+                  className={`flex-1 py-2 px-3 text-xs rounded-xl font-medium flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     activeTab === 'netbanking'
-                      ? 'border-[#3395FF] text-[#0C2340] font-semibold'
-                      : 'border-transparent text-[#778899] hover:text-[#0C2340]'
+                      ? 'bg-white text-[#0C2340] font-semibold shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
                   }`}
                 >
                   <Building2 className="w-3.5 h-3.5" />
@@ -375,32 +379,39 @@ export default function RazorpayModal({
               </div>
 
               {/* Tab Contents */}
-              <div className="pt-4">
+              <div className="pt-3.5">
                 {activeTab === 'upi' && (
                   <div className="space-y-3">
-                    <div className="p-3 rounded-xl bg-[#F4F9FF] border border-[#D5E7FA] flex items-center justify-between">
+                    <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/70 to-indigo-50/70 border border-blue-100 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <QrCode className="w-8 h-8 text-[#0C2340]" />
+                        <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-blue-100 flex items-center justify-center text-[#0C2340]">
+                          <QrCode className="w-5 h-5 text-[#3395FF]" />
+                        </div>
                         <div className="text-xs">
                           <p className="font-semibold text-[#0C2340]">Scan & Pay via any UPI App</p>
-                          <p className="text-[11px] text-[#557799]">GPay, PhonePe, Paytm, CRED</p>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span className="text-[10px] bg-white px-1.5 py-0.5 rounded text-slate-600 font-medium border border-slate-200">GPay</span>
+                            <span className="text-[10px] bg-white px-1.5 py-0.5 rounded text-slate-600 font-medium border border-slate-200">PhonePe</span>
+                            <span className="text-[10px] bg-white px-1.5 py-0.5 rounded text-slate-600 font-medium border border-slate-200">Paytm</span>
+                            <span className="text-[10px] bg-white px-1.5 py-0.5 rounded text-slate-600 font-medium border border-slate-200">CRED</span>
+                          </div>
                         </div>
                       </div>
-                      <span className="text-[10px] font-bold text-[#3395FF] bg-white px-2 py-1 rounded border border-[#CCD8E5]">
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-200">
                         Instant
                       </span>
                     </div>
 
                     <div className="text-xs">
-                      <label className="block text-[10px] uppercase font-semibold text-[#667788] mb-1">
+                      <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">
                         Or enter UPI ID / VPA
                       </label>
                       <input
                         type="text"
                         value={upiId}
                         onChange={(e) => setUpiId(e.target.value)}
-                        placeholder="Enter UPI ID (e.g. yourname@okhdfcbank or 9876543210@paytm)"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#CCD8E5] focus:outline-none focus:ring-1 focus:ring-[#3395FF] font-mono text-xs text-[#0C2340]"
+                        placeholder="e.g. yourname@okhdfcbank or 9876543210@paytm"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] font-mono text-xs text-[#0C2340] placeholder:text-slate-400 transition-all"
                       />
                     </div>
                   </div>
@@ -409,7 +420,7 @@ export default function RazorpayModal({
                 {activeTab === 'card' && (
                   <div className="space-y-3 text-xs">
                     <div>
-                      <label className="block text-[10px] uppercase font-semibold text-[#667788] mb-1">
+                      <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">
                         Card Number
                       </label>
                       <input
@@ -417,28 +428,28 @@ export default function RazorpayModal({
                         value={cardNumber}
                         onChange={(e) => setCardNumber(e.target.value)}
                         placeholder="Enter 16-digit card number"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#CCD8E5] font-mono text-xs text-[#0C2340] focus:outline-none focus:ring-1 focus:ring-[#3395FF]"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] font-mono text-xs text-[#0C2340] placeholder:text-slate-400 transition-all"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[10px] uppercase font-semibold text-[#667788] mb-1">Expiry</label>
+                        <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">Expiry</label>
                         <input 
                           type="text" 
                           value={cardExpiry}
                           onChange={(e) => setCardExpiry(e.target.value)}
                           placeholder="MM/YY" 
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#CCD8E5] font-mono text-xs text-[#0C2340] focus:outline-none focus:ring-1 focus:ring-[#3395FF]" 
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] font-mono text-xs text-[#0C2340] placeholder:text-slate-400 transition-all" 
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] uppercase font-semibold text-[#667788] mb-1">CVV</label>
+                        <label className="block text-[10px] uppercase font-bold text-slate-500 tracking-wider mb-1">CVV</label>
                         <input 
                           type="password" 
                           value={cardCvv}
                           onChange={(e) => setCardCvv(e.target.value)}
                           placeholder="CVV" 
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#CCD8E5] font-mono text-xs text-[#0C2340] focus:outline-none focus:ring-1 focus:ring-[#3395FF]" 
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3395FF]/20 focus:border-[#3395FF] font-mono text-xs text-[#0C2340] placeholder:text-slate-400 transition-all" 
                         />
                       </div>
                     </div>
@@ -447,12 +458,12 @@ export default function RazorpayModal({
 
                 {activeTab === 'netbanking' && (
                   <div className="grid grid-cols-3 gap-2 text-xs">
-                    {['HDFC Bank', 'ICICI Bank', 'SBI', 'Axis Bank', 'Kotak', 'Other'].map((b) => (
+                    {['HDFC Bank', 'ICICI Bank', 'SBI', 'Axis Bank', 'Kotak', 'All Other Banks'].map((b) => (
                       <button
                         key={b}
                         type="button"
                         onClick={() => handleProceedWithRazorpay()}
-                        className="p-2.5 rounded-xl border border-[#CCD8E5] hover:bg-[#F0F5FA] hover:border-[#3395FF] text-center font-medium text-[#204060] transition-colors cursor-pointer"
+                        className="p-3 rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-[#3395FF] text-center font-medium text-slate-700 transition-all cursor-pointer shadow-2xs"
                       >
                         {b}
                       </button>
@@ -468,7 +479,7 @@ export default function RazorpayModal({
                 type="button"
                 onClick={handleProceedWithRazorpay}
                 disabled={isProcessing}
-                className="w-full py-4 rounded-xl bg-[#0C2340] hover:bg-[#16355C] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-75"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0C2340] via-[#123157] to-[#0C2340] hover:from-[#14345C] hover:to-[#183E6E] text-white font-semibold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-blue-950/20 active:scale-[0.99] transition-all cursor-pointer disabled:opacity-75"
               >
                 {isProcessing ? (
                   <>
@@ -477,20 +488,18 @@ export default function RazorpayModal({
                   </>
                 ) : (
                   <>
-                    <ExternalLink className="w-4 h-4 text-[#3395FF]" />
-                    <span>Pay ₹{totalAmount} with Razorpay</span>
+                    <Lock className="w-4 h-4 text-emerald-400" />
+                    <span>Pay ₹{totalAmount}.00 with Razorpay</span>
                   </>
                 )}
               </button>
             </div>
 
             {/* Trust Footer */}
-            <div className="flex items-center justify-center gap-2 text-[10px] text-[#778899]">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#3395FF]" />
-              <span>
-                {(import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_live_')
-                  ? 'Razorpay Official • 256-bit SSL Secure Live Payment'
-                  : 'Razorpay Verified • Test Sandbox Mode'}
+            <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 pt-1">
+              <ShieldCheck className="w-4 h-4 text-[#3395FF]" />
+              <span className="font-medium">
+                Razorpay 256-Bit SSL Encrypted • 100% Secure Checkout
               </span>
             </div>
 
