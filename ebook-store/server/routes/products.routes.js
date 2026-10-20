@@ -1,27 +1,18 @@
 const express = require('express');
 const Product = require('../models/Product');
+const User = require('../models/User');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { ALL_PRODUCTS } = require('../seedData');
 
 const router = express.Router();
 
-// GET all products (with auto-seed fallback if collection is empty)
+// GET all products
 router.get('/', async (req, res) => {
   try {
-    let products = await Product.find().sort({ createdAt: 1 });
-    
-    // Auto-seed if empty
-    if (!products || products.length === 0) {
-      console.log('Product collection empty. Initializing with default 40 products...');
-      await Product.insertMany(ALL_PRODUCTS);
-      products = await Product.find().sort({ createdAt: 1 });
-    }
-
-    res.json(products);
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.json(products || []);
   } catch (error) {
     console.error('Fetch products error:', error);
-    // Fallback in-memory response so frontend never crashes if Mongo is booting
-    res.json(ALL_PRODUCTS);
+    res.json([]);
   }
 });
 
@@ -125,11 +116,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+// DELETE /clear/all - Clear all products (Admin)
+router.delete('/clear/all', async (req, res) => {
+  try {
+    await Product.deleteMany({});
+    res.json({ message: 'All products cleared from catalog' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to clear products' });
+  }
+});
+
 // DELETE /:id - Delete product (Admin)
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     await Product.findOneAndDelete({ id });
+    // Completely remove from all users' libraries across the platform
+    await User.updateMany({}, { $pull: { purchasedProducts: id } });
     res.json({ message: 'Product deleted successfully', id });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete product' });

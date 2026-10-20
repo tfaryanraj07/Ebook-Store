@@ -45,7 +45,15 @@ export async function apiFetchProducts() {
     return await request('/products');
   } catch (e) {
     const local = localStorage.getItem('hengyi_products');
-    return local ? JSON.parse(local) : ALL_PRODUCTS;
+    return local ? JSON.parse(local) : [];
+  }
+}
+
+export async function apiClearAllProducts() {
+  try {
+    return await request('/products/clear/all', { method: 'DELETE' });
+  } catch (e) {
+    return null;
   }
 }
 

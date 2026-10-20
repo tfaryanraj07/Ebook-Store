@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  ALL_PRODUCTS, 
   COUPONS 
 } from './data/products';
 import {
@@ -9,6 +8,7 @@ import {
   apiBulkUpdatePrice,
   apiCreateProduct,
   apiDeleteProduct,
+  apiClearAllProducts,
   apiFetchCoupons,
   apiCreateCoupon,
   apiDeleteCoupon,
@@ -31,10 +31,23 @@ import Footer from './components/Footer';
 import { ShoppingBag, ChevronUp } from 'lucide-react';
 
 export default function App() {
-  // State for products (supports price fluctuations & custom items)
+  // State for products: Starts empty and loads live from MongoDB Atlas backend
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('hengyi_products');
-    return saved ? JSON.parse(saved) : ALL_PRODUCTS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Clear out legacy 40 mock products if present in local browser storage
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.id === 'prod-01') {
+          localStorage.removeItem('hengyi_products');
+          return [];
+        }
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
   });
 
   // State for active category, search, and sort
@@ -147,8 +160,9 @@ export default function App() {
       apiWakeupServer();
       try {
         const remoteProducts = await apiFetchProducts();
-        if (isMounted && Array.isArray(remoteProducts) && remoteProducts.length > 0) {
+        if (isMounted && Array.isArray(remoteProducts)) {
           setProducts(remoteProducts);
+          localStorage.setItem('hengyi_products', JSON.stringify(remoteProducts));
         }
       } catch (e) {
         console.warn('Using local products data:', e.message);
@@ -289,10 +303,23 @@ export default function App() {
   const handleDeleteProduct = async (productId) => {
     setProducts(prev => prev.filter(p => p.id !== productId));
     setCartItems(prev => prev.filter(item => item.id !== productId));
+    setLibraryItems(prev => prev.filter(item => item.id !== productId));
     try {
       await apiDeleteProduct(productId);
     } catch (err) {
       console.warn('Product deletion sync failed:', err.message);
+    }
+  };
+
+  const handleClearAllProducts = async () => {
+    setProducts([]);
+    setCartItems([]);
+    setLibraryItems([]);
+    localStorage.removeItem('hengyi_products');
+    try {
+      await apiClearAllProducts();
+    } catch (err) {
+      console.warn('Clear all products sync failed:', err.message);
     }
   };
 
@@ -449,7 +476,7 @@ export default function App() {
           onOpenAdminLogin={handleOpenAdminLogin}
           onOpenAdminPage={() => setCurrentView('admin')}
           onExitAdmin={handleExitAdmin}
-          onOpenReader={() => setReaderProduct(products[0] || ALL_PRODUCTS[0])}
+          onOpenReader={() => products[0] && setReaderProduct(products[0])}
         />
       )}
 
@@ -462,6 +489,7 @@ export default function App() {
             onBulkUpdatePrice={handleBulkUpdatePrice}
             onAddProduct={handleAddNewProduct}
             onDeleteProduct={handleDeleteProduct}
+            onClearAllProducts={handleClearAllProducts}
             orders={orders}
             coupons={coupons}
             onAddCoupon={handleAddNewCoupon}
@@ -473,7 +501,7 @@ export default function App() {
           <LandingPage
             onOpenSignIn={handleOpenSignIn}
             onOpenSignUp={handleOpenSignUp}
-            onOpenReader={() => setReaderProduct(products[0] || ALL_PRODUCTS[0])}
+            onOpenReader={() => products[0] && setReaderProduct(products[0])}
             onExploreClick={handleOpenSignIn}
             onEnterDashboardDemo={() => setCurrentView('dashboard')}
           />

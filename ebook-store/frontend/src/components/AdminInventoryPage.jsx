@@ -34,6 +34,7 @@ export default function AdminInventoryPage({
   onBulkUpdatePrice,
   onAddProduct,
   onDeleteProduct,
+  onClearAllProducts,
   orders = [],
   coupons = [],
   onAddCoupon,
@@ -401,7 +402,7 @@ export default function AdminInventoryPage({
                 )}
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                 <span className="text-xs font-semibold text-[#66544C]">Category:</span>
                 <select
                   value={inventoryCategory}
@@ -414,6 +415,29 @@ export default function AdminInventoryPage({
                   <option value="mindfulness">Mindfulness</option>
                   <option value="lifestyle">Lifestyle</option>
                 </select>
+
+                <button
+                  onClick={() => setActiveTab('add-product')}
+                  className="px-3.5 py-2 rounded-xl bg-[#241E1C] hover:bg-[#3D332F] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                >
+                  <PlusCircle className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Add Planner</span>
+                </button>
+
+                {products.length > 0 && onClearAllProducts && (
+                  <button
+                    onClick={() => {
+                      if (confirm('Are you sure you want to delete ALL planners from the store catalog? This action will remove them permanently from database and all user libraries.')) {
+                        onClearAllProducts();
+                        showToast('All products cleared from catalog.');
+                      }
+                    }}
+                    className="px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-semibold transition-colors cursor-pointer shrink-0"
+                    title="Clear All Products from Store"
+                  >
+                    Clear All
+                  </button>
+                )}
               </div>
             </div>
 
@@ -432,7 +456,27 @@ export default function AdminInventoryPage({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EFE7DE]">
-                  {filteredProducts.map((p) => (
+                  {filteredProducts.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="py-14 text-center">
+                        <div className="w-12 h-12 rounded-full bg-[#EFE3D8] text-[#8E6E60] flex items-center justify-center mx-auto mb-3">
+                          <Package className="w-6 h-6" />
+                        </div>
+                        <h4 className="font-syne font-bold text-base text-[#241E1C]">Your Store Inventory is Ready</h4>
+                        <p className="text-xs text-[#7A6960] mt-1 max-w-sm mx-auto">
+                          No mock products remaining. You can now add your custom digital ebooks and PDF planners 1 by 1.
+                        </p>
+                        <button
+                          onClick={() => setActiveTab('add-product')}
+                          className="mt-4 px-5 py-2.5 rounded-full bg-[#241E1C] hover:bg-[#3D332F] text-white text-xs font-semibold inline-flex items-center gap-2 shadow-xs transition-all cursor-pointer"
+                        >
+                          <PlusCircle className="w-4 h-4 text-emerald-400" />
+                          <span>Publish Your First Ebook / PDF</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredProducts.map((p) => (
                     <tr key={p.id} className="hover:bg-[#FCFAF7] transition-colors">
                       
                       {/* Thumbnail */}
@@ -531,7 +575,7 @@ export default function AdminInventoryPage({
                       </td>
 
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
             </div>

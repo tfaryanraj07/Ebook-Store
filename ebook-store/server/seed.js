@@ -16,15 +16,9 @@ async function seedDatabase() {
     await mongoose.connect(mongoUri);
     console.log('✓ MongoDB Connected Successfully.');
 
-    // 1. Seed Products
+    // 1. Products - Clean slate (products added manually via Admin)
     const existingProductsCount = await Product.countDocuments();
-    if (existingProductsCount === 0) {
-      console.log(`Seeding ${ALL_PRODUCTS.length} digital planners into MongoDB...`);
-      await Product.insertMany(ALL_PRODUCTS);
-      console.log(`✓ Successfully seeded ${ALL_PRODUCTS.length} products.`);
-    } else {
-      console.log(`✓ Products already present in database (${existingProductsCount} items).`);
-    }
+    console.log(`✓ Products present in database: ${existingProductsCount} items.`);
 
     // 2. Seed Coupons
     const existingCouponsCount = await Coupon.countDocuments();
@@ -36,21 +30,23 @@ async function seedDatabase() {
       console.log(`✓ Coupons already present (${existingCouponsCount} active).`);
     }
 
-    // 3. Seed Default Admin Account
-    const existingAdmin = await User.findOne({ email: 'admin@hengyi.studio' });
+    // 3. Seed Plenvi Admin Account
+    const adminEmail = process.env.ADMIN_EMAIL || 'rsolanki9235@gmail.com';
+    const adminPasscode = process.env.ADMIN_PASSCODE || 'raj07';
+    const existingAdmin = await User.findOne({ email: adminEmail });
     if (!existingAdmin) {
-      const passwordHash = await bcrypt.hash('admin123', 10);
+      const passwordHash = await bcrypt.hash(adminPasscode, 10);
       await User.create({
-        name: 'Hengyi Master Admin',
-        email: 'admin@hengyi.studio',
+        name: 'Plenvi Master Administrator',
+        email: adminEmail,
         passwordHash,
         role: 'admin',
-        purchasedProducts: ALL_PRODUCTS.map(p => p.id),
+        purchasedProducts: [],
       });
-      console.log('✓ Default Admin created (admin@hengyi.studio / admin123).');
+      console.log(`✓ Master Admin created (${adminEmail}).`);
     }
 
-    console.log('🎉 Database seeding complete!');
+    console.log('🎉 Database initialization complete!');
     process.exit(0);
   } catch (error) {
     console.error('❌ Seeding failed:', error.message);

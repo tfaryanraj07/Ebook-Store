@@ -18,9 +18,9 @@ export default function ProductGrid({
         <div className="w-16 h-16 rounded-full bg-[#EFE3D8] text-[#8E6E60] flex items-center justify-center mx-auto mb-4">
           <Sparkles className="w-8 h-8" />
         </div>
-        <h3 className="font-serif text-2xl text-[#2B231F] font-medium">No planners matched your search</h3>
-        <p className="text-sm text-[#7D6B61] mt-1 max-w-md mx-auto">
-          Try searching for keywords like "habit", "budget", "gratitude", "meal", or select "All Products".
+        <h3 className="font-syne text-2xl text-[#2B231F] font-bold">Collection Updating</h3>
+        <p className="text-sm text-[#7D6B61] mt-1.5 max-w-md mx-auto">
+          New premium digital planners and ebooks are currently being published. Explore the categories above or check back shortly.
         </p>
       </div>
     );
