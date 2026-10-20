@@ -223,8 +223,13 @@ export default function DashboardPage({
                     <button
                       onClick={() => {
                         if (item.pdfUrl) {
+                          const rawEnvUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                          const cleanBase = rawEnvUrl.replace(/\/+$/, '').replace(/\/api$/, '');
+                          const finalUrl = (item.pdfUrl.startsWith('http') || item.pdfUrl.startsWith('data:'))
+                            ? item.pdfUrl
+                            : `${cleanBase}${item.pdfUrl.startsWith('/') ? '' : '/'}${item.pdfUrl}`;
                           const link = document.createElement('a');
-                          link.href = item.pdfUrl;
+                          link.href = finalUrl;
                           link.download = item.pdfName || `${item.title}.pdf`;
                           document.body.appendChild(link);
                           link.click();

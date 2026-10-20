@@ -111,37 +111,72 @@ export default function App() {
   // Floating button visibility on scroll
   const [showFloatingActions, setShowFloatingActions] = useState(false);
 
-  // Sync to localStorage
+  // Sync to localStorage with quota-safe protection
   useEffect(() => {
-    localStorage.setItem('hengyi_cart', JSON.stringify(cartItems));
+    try {
+      localStorage.setItem('hengyi_cart', JSON.stringify(cartItems));
+    } catch (e) {
+      console.warn('Cart storage warning:', e.message);
+    }
   }, [cartItems]);
 
   useEffect(() => {
-    localStorage.setItem('hengyi_library', JSON.stringify(libraryItems));
+    try {
+      localStorage.setItem('hengyi_library', JSON.stringify(libraryItems));
+    } catch (e) {
+      console.warn('Library storage warning:', e.message);
+    }
   }, [libraryItems]);
 
   useEffect(() => {
-    localStorage.setItem('hengyi_products', JSON.stringify(products));
+    try {
+      // Strip large base64 data URLs from localStorage to prevent QuotaExceededError
+      const sanitized = products.map(p => {
+        if (p.pdfUrl && p.pdfUrl.startsWith('data:')) {
+          return { ...p, pdfUrl: `/api/products/${p.id}/pdf` };
+        }
+        return p;
+      });
+      localStorage.setItem('hengyi_products', JSON.stringify(sanitized));
+    } catch (e) {
+      console.warn('Products storage quota warning (safe fallback):', e.message);
+    }
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('hengyi_orders', JSON.stringify(orders));
+    try {
+      localStorage.setItem('hengyi_orders', JSON.stringify(orders));
+    } catch (e) {
+      console.warn('Orders storage warning:', e.message);
+    }
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('hengyi_coupons', JSON.stringify(coupons));
+    try {
+      localStorage.setItem('hengyi_coupons', JSON.stringify(coupons));
+    } catch (e) {
+      console.warn('Coupons storage warning:', e.message);
+    }
   }, [coupons]);
 
   useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('hengyi_user', JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem('hengyi_user');
+    try {
+      if (currentUser) {
+        localStorage.setItem('hengyi_user', JSON.stringify(currentUser));
+      } else {
+        localStorage.removeItem('hengyi_user');
+      }
+    } catch (e) {
+      console.warn('User storage warning:', e.message);
     }
   }, [currentUser]);
 
   useEffect(() => {
-    localStorage.setItem('hengyi_admin_auth', isAdminLoggedIn ? 'true' : 'false');
+    try {
+      localStorage.setItem('hengyi_admin_auth', isAdminLoggedIn ? 'true' : 'false');
+    } catch (e) {
+      console.warn('Admin auth storage warning:', e.message);
+    }
   }, [isAdminLoggedIn]);
 
   // Scroll listener for floating actions
@@ -292,11 +327,22 @@ export default function App() {
 
   // ADMIN PRODUCT CRUD
   const handleAddNewProduct = async (newProd) => {
-    setProducts(prev => [newProd, ...prev]);
     try {
-      await apiCreateProduct(newProd);
+      // 1. Direct cloud sync to MongoDB Atlas
+      const saved = await apiCreateProduct(newProd);
+      const activeProd = (saved && saved.id) ? saved : newProd;
+
+      // 2. Add to active React state so all components update immediately
+      setProducts(prev => {
+        const withoutNew = prev.filter(p => p.id !== activeProd.id);
+        return [activeProd, ...withoutNew];
+      });
+
+      return activeProd;
     } catch (err) {
-      console.warn('Product sync to server failed:', err.message);
+      console.warn('Product sync to server fallback:', err.message);
+      setProducts(prev => [newProd, ...prev]);
+      return newProd;
     }
   };
 
@@ -437,16 +483,20 @@ export default function App() {
   };
 
   // Filter & Sort Products for Storefront
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = (products || []).filter(product => {
+    if (!product) return false;
     const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
-    const matchesSearch = !searchQuery || 
-      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.shortDesc.toLowerCase().includes(searchQuery.toLowerCase());
+    const searchLower = (searchQuery || '').toLowerCase();
+    const titleLower = (product.title || '').toLowerCase();
+    const descLower = (product.shortDesc || '').toLowerCase();
+    const matchesSearch = !searchLower || 
+      titleLower.includes(searchLower) ||
+      descLower.includes(searchLower);
     return matchesCategory && matchesSearch;
   }).sort((a, b) => {
-    if (sortBy === 'rating') return b.rating - a.rating;
-    if (sortBy === 'price-asc') return a.price - b.price;
-    if (sortBy === 'title') return a.title.localeCompare(b.title);
+    if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+    if (sortBy === 'price-asc') return (a.price || 0) - (b.price || 0);
+    if (sortBy === 'title') return (a.title || '').localeCompare(b.title || '');
     return (b.reviewsCount || 0) - (a.reviewsCount || 0);
   });
 

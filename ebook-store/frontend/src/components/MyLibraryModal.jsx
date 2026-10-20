@@ -114,7 +114,23 @@ export default function MyLibraryModal({
                     </button>
 
                     <button
-                      onClick={() => downloadPlannerPdf(item)}
+                      onClick={() => {
+                        if (item.pdfUrl) {
+                          const rawEnvUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                          const cleanBase = rawEnvUrl.replace(/\/+$/, '').replace(/\/api$/, '');
+                          const finalUrl = (item.pdfUrl.startsWith('http') || item.pdfUrl.startsWith('data:'))
+                            ? item.pdfUrl
+                            : `${cleanBase}${item.pdfUrl.startsWith('/') ? '' : '/'}${item.pdfUrl}`;
+                          const link = document.createElement('a');
+                          link.href = finalUrl;
+                          link.download = item.pdfName || `${item.title}.pdf`;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        } else {
+                          downloadPlannerPdf(item);
+                        }
+                      }}
                       className="py-2 px-3 rounded-xl bg-white hover:bg-[#FAF4EE] border border-[#D8C7BA] text-[#4A3C35] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                       title="Download PDF"
                     >

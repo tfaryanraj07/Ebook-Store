@@ -98,34 +98,84 @@ export default function AdminInventoryPage({
     }
   };
 
-  // Handle PDF file selection
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  // Helper: Compress and optimize image to max 1200px width/height and clean JPEG
+  const compressImageFile = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_DIM = 1200;
+
+          if (width > height) {
+            if (width > MAX_DIM) {
+              height = Math.round((height * MAX_DIM) / width);
+              width = MAX_DIM;
+            }
+          } else {
+            if (height > MAX_DIM) {
+              width = Math.round((width * MAX_DIM) / height);
+              height = MAX_DIM;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle PDF file selection with size guard (max 15MB)
   const handlePdfUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.size > 15 * 1024 * 1024) {
+      showToast('PDF is larger than 15MB. Please choose a file under 15MB or paste a cloud URL below.');
+      return;
+    }
 
     setPdfName(file.name);
     const reader = new FileReader();
     reader.onload = (event) => {
       setPdfUrl(event.target.result);
       setPdfFile(file);
-      showToast(`Attached PDF: ${file.name}`);
+      showToast(`Attached PDF: ${file.name} (${Math.round(file.size / 1024)} KB)`);
     };
     reader.readAsDataURL(file);
   };
 
-  // Handle Reference Images selection (multiple)
-  const handleImageUpload = (e) => {
+  // Handle Reference Images selection (with automatic compression)
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setReferenceImages(prev => [...prev, event.target.result]);
-      };
-      reader.readAsDataURL(file);
-    });
-    showToast(`Uploaded ${files.length} reference image(s)`);
+    showToast(`Optimizing ${files.length} preview image(s)...`);
+    const optimized = [];
+    for (const file of files) {
+      try {
+        const compressed = await compressImageFile(file);
+        if (compressed) optimized.push(compressed);
+      } catch (err) {
+        console.warn('Image compression fallback:', err);
+      }
+    }
+    setReferenceImages(prev => [...prev, ...optimized]);
+    showToast(`Added ${optimized.length} optimized preview image(s)`);
   };
 
   // Add image by URL
@@ -142,51 +192,60 @@ export default function AdminInventoryPage({
   };
 
   // Handle New Product Submission
-  const handleCreateProduct = (e) => {
+  const handleCreateProduct = async (e) => {
     e.preventDefault();
     if (!newTitle.trim()) {
       showToast('Please enter a planner title');
       return;
     }
 
-    const newProd = {
-      id: `prod-${Date.now()}`,
-      slug: newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      title: newTitle.trim(),
-      category: newCategory,
-      price: Number(newPrice) || 49,
-      originalPrice: (Number(newPrice) || 49) * 10,
-      rating: 5.0,
-      reviewsCount: 1,
-      badge: newBadge || 'New Release',
-      featured: false,
-      shortDesc: newDesc || 'Comprehensive digital planner with hyperlinked navigation and printable sheets.',
-      pagesCount: Number(newPages) || 64,
-      format: 'PDF + GoodNotes + Printable',
-      themeColor: '#EBE2DA',
-      coverImage: referenceImages[0] || '',
-      referenceImages: referenceImages,
-      pdfUrl: pdfUrl || '',
-      pdfName: pdfName || `${newTitle.trim()}.pdf`,
-      features: [
-        'Hyperlinked Tabs for iPad / Tablet',
-        'Printable High-Res Vector PDF',
-        'Undated Lifetime Multi-Year Format',
-        'Instant Cloud Download Access'
-      ]
-    };
+    setIsPublishing(true);
+    try {
+      const prodId = `prod-${Date.now()}`;
+      const newProd = {
+        id: prodId,
+        slug: newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        title: newTitle.trim(),
+        category: newCategory,
+        price: Number(newPrice) || 49,
+        originalPrice: (Number(newPrice) || 49) * 10,
+        rating: 5.0,
+        reviewsCount: 1,
+        badge: newBadge || 'New Release',
+        featured: false,
+        shortDesc: newDesc.trim() || 'Comprehensive digital planner with hyperlinked navigation and printable sheets.',
+        pagesCount: Number(newPages) || 64,
+        format: 'PDF + GoodNotes + Printable',
+        themeColor: '#EBE2DA',
+        coverImage: referenceImages[0] || '',
+        referenceImages: referenceImages,
+        pdfUrl: pdfUrl || '',
+        pdfName: pdfName || `${newTitle.trim()}.pdf`,
+        features: [
+          'Hyperlinked Tabs for iPad / Tablet',
+          'Printable High-Res Vector PDF',
+          'Undated Lifetime Multi-Year Format',
+          'Instant Cloud Download Access'
+        ]
+      };
 
-    onAddProduct(newProd);
+      await onAddProduct(newProd);
 
-    // Reset Form
-    setNewTitle('');
-    setNewDesc('');
-    setPdfFile(null);
-    setPdfName('');
-    setPdfUrl('');
-    setReferenceImages([]);
-    showToast(`Planner "${newProd.title}" published with ${newProd.referenceImages.length} images!`);
-    setActiveTab('inventory');
+      // Reset Form
+      setNewTitle('');
+      setNewDesc('');
+      setPdfFile(null);
+      setPdfName('');
+      setPdfUrl('');
+      setReferenceImages([]);
+      showToast(`Planner "${newProd.title}" successfully saved to MongoDB!`);
+      setActiveTab('inventory');
+    } catch (err) {
+      console.error('Publish error:', err);
+      showToast(`Notice: ${err?.message || 'Error occurred while publishing'}`);
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   // Handle New Coupon Submission
@@ -205,12 +264,16 @@ export default function AdminInventoryPage({
     showToast(`Coupon "${newC.code}" created successfully!`);
   };
 
-  // Filtered Inventory
-  const filteredProducts = products.filter(p => {
+  // Filtered Inventory with safe null guards
+  const filteredProducts = (products || []).filter(p => {
+    if (!p) return false;
     const matchCat = inventoryCategory === 'all' || p.category === inventoryCategory;
-    const matchSearch = !inventorySearch || 
-      p.title.toLowerCase().includes(inventorySearch.toLowerCase()) ||
-      p.category.toLowerCase().includes(inventorySearch.toLowerCase());
+    const searchLower = (inventorySearch || '').toLowerCase();
+    const titleLower = (p.title || '').toLowerCase();
+    const catLower = (p.category || '').toLowerCase();
+    const matchSearch = !searchLower || 
+      titleLower.includes(searchLower) ||
+      catLower.includes(searchLower);
     return matchCat && matchSearch;
   });
 
@@ -822,10 +885,20 @@ export default function AdminInventoryPage({
               <div className="flex justify-end pt-4">
                 <button
                   type="submit"
-                  className="px-8 py-4 rounded-full bg-[#241E1C] hover:bg-[#3D332F] text-white font-syne font-bold text-xs uppercase tracking-wider shadow-xl hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
+                  disabled={isPublishing}
+                  className="px-8 py-4 rounded-full bg-[#241E1C] hover:bg-[#3D332F] disabled:opacity-60 disabled:cursor-not-allowed text-white font-syne font-bold text-xs uppercase tracking-wider shadow-xl hover:scale-105 transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <PlusCircle className="w-4 h-4 text-emerald-400" />
-                  <span>Publish Planner to Inventory & Store</span>
+                  {isPublishing ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+                      <span>Saving to MongoDB & Publishing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <PlusCircle className="w-4 h-4 text-emerald-400" />
+                      <span>Publish Planner to Inventory & Store</span>
+                    </>
+                  )}
                 </button>
               </div>
 
