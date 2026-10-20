@@ -68,7 +68,7 @@ export default function AdminPanel({
     const p = Number(priceVal);
     if (isNaN(p) || p <= 0) return;
     onBulkUpdatePrice(p);
-    showToast(`All 40 products fluctuated to ₹${p} successfully!`);
+    showToast(`All catalog products updated to ₹${p} successfully!`);
   };
 
   // Handle Single Price Change
@@ -254,7 +254,7 @@ export default function AdminPanel({
                       <span>Bulk Price Fluctuation Control</span>
                     </h3>
                     <p className="text-xs text-[#7A6960] mt-0.5">
-                      Instantly change the price of all 40 digital products with 1 click across the live storefront.
+                      Instantly change the price of all digital products with 1 click across the live storefront.
                     </p>
                   </div>
 
@@ -548,7 +548,7 @@ export default function AdminPanel({
 
               {orders.length === 0 ? (
                 <div className="p-10 text-center bg-white rounded-2xl border border-[#E7DCD0] text-xs text-[#827167]">
-                  No orders placed yet in this session. Try simulating a ₹49 checkout on the storefront!
+                  No orders placed yet in this session. Try simulating a checkout on the storefront!
                 </div>
               ) : (
                 <div className="space-y-2.5">

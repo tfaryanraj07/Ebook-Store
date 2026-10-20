@@ -44,13 +44,13 @@ export default function LandingPage({
           
           <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
             <span className="text-xs uppercase font-extrabold tracking-widest text-[#8E7467] block">
-              THE 40-TEMPLATE DIGITAL ARSENAL
+              THE DIGITAL PLANNING ARSENAL
             </span>
             <h2 className="font-syne text-3xl sm:text-4xl font-extrabold text-[#241E1C]">
               Engineered for Quiet Momentum
             </h2>
             <p className="text-sm sm:text-base text-[#615249] leading-relaxed">
-              Every planner in our 40-product catalog is designed with clean, intentional white-space, printable A4 compatibility, and seamless iPad GoodNotes hyperlinks.
+              Every planner in our digital catalog is designed with clean, intentional white-space, printable A4 compatibility, and seamless iPad GoodNotes hyperlinks.
             </p>
           </div>
 
@@ -66,12 +66,12 @@ export default function LandingPage({
                 Productivity & Planning
               </h3>
               <p className="text-xs text-[#6B5A51] leading-relaxed">
-                10 specialized planners: Habit radar wheels, sales pipelines, homeschool schedules, study Pomodoro trackers, and content planners.
+                Specialized planners: Habit radar wheels, sales pipelines, homeschool schedules, study Pomodoro trackers, and content planners.
               </p>
               <div className="pt-2 text-xs font-semibold text-[#8E6E60] flex items-center gap-1">
-                <span>10 Digital Systems</span>
+                <span>Productivity Systems</span>
                 <span>•</span>
-                <span>₹49 each</span>
+                <span>Instant PDF</span>
               </div>
             </div>
 
@@ -84,12 +84,12 @@ export default function LandingPage({
                 Finance & Budgeting
               </h3>
               <p className="text-xs text-[#6B5A51] leading-relaxed">
-                10 wealth frameworks: Zero-based monthly budgets, 52-week savings challenges, sinking funds, paycheck cash envelopes, and password vaults.
+                Wealth frameworks: Zero-based monthly budgets, 52-week savings challenges, sinking funds, paycheck cash envelopes, and password vaults.
               </p>
               <div className="pt-2 text-xs font-semibold text-[#8E6E60] flex items-center gap-1">
-                <span>10 Wealth Logs</span>
+                <span>Wealth Trackers</span>
                 <span>•</span>
-                <span>₹49 each</span>
+                <span>Instant PDF</span>
               </div>
             </div>
 
@@ -102,12 +102,12 @@ export default function LandingPage({
                 Mindfulness & Wellness
               </h3>
               <p className="text-xs text-[#6B5A51] leading-relaxed">
-                10 sacred journals: 5-minute morning reflections, gratitude logs, shadow work, 3-6-9 manifestation scripts, and anxiety grounding tools.
+                Sacred journals: 5-minute morning reflections, gratitude logs, shadow work, 3-6-9 manifestation scripts, and anxiety grounding tools.
               </p>
               <div className="pt-2 text-xs font-semibold text-[#8E6E60] flex items-center gap-1">
-                <span>10 Guided Journals</span>
+                <span>Guided Journals</span>
                 <span>•</span>
-                <span>₹49 each</span>
+                <span>Instant PDF</span>
               </div>
             </div>
 
@@ -120,12 +120,12 @@ export default function LandingPage({
                 Lifestyle & Personal Care
               </h3>
               <p className="text-xs text-[#6B5A51] leading-relaxed">
-                10 lifestyle companions: Meal batching, yoga asana flows, self-care routines, luxury wedding planners, and pregnancy milestone books.
+                Lifestyle companions: Meal batching, yoga asana flows, self-care routines, luxury wedding planners, and pregnancy milestone books.
               </p>
               <div className="pt-2 text-xs font-semibold text-[#8E6E60] flex items-center gap-1">
-                <span>10 Life Planners</span>
+                <span>Life Planners</span>
                 <span>•</span>
-                <span>₹49 each</span>
+                <span>Instant PDF</span>
               </div>
             </div>
 
@@ -208,7 +208,7 @@ export default function LandingPage({
           </span>
 
           <h2 className="font-syne text-3xl sm:text-5xl font-extrabold tracking-tight">
-            Sign In to Unlock Your Digital Library & 40 Planners
+            Sign In to Unlock Your Digital Library & Planners
           </h2>
 
           <p className="text-sm sm:text-base text-[#D0BEB3] max-w-2xl mx-auto leading-relaxed">
@@ -234,9 +234,9 @@ export default function LandingPage({
           </div>
 
           <div className="pt-6 flex items-center justify-center gap-6 text-xs text-[#A8988E]">
-            <span>✓ Flat ₹49 Per Planner</span>
-            <span>✓ Razorpay 256-Bit SSL Encrypted</span>
             <span>✓ Instant PDF Downloads</span>
+            <span>✓ Razorpay 256-Bit SSL Encrypted</span>
+            <span>✓ Lifetime Access</span>
           </div>
 
         </div>

@@ -447,7 +447,7 @@ export default function ReaderModal({ product, onClose, onAddToCart, isInCart })
               className="px-5 py-2.5 rounded-full bg-[#E8D4C8] hover:bg-[#F3E3DA] text-[#241E1C] font-semibold text-xs uppercase tracking-wider flex items-center gap-2 shadow-md transition-all cursor-pointer"
             >
               <ShoppingBag className="w-3.5 h-3.5" />
-              <span>{isInCart ? 'In Cart (Add Another)' : 'Get Instant Access (₹49)'}</span>
+              <span>{isInCart ? 'In Cart (Add Another)' : `Get Instant Access (₹${product.price})`}</span>
             </button>
           </div>
         </div>

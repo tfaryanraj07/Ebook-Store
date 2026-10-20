@@ -69,11 +69,9 @@ export default function Hero({
 
             {/* Price Callout Badge */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
-              <div className="flex items-baseline gap-2 bg-white/90 backdrop-blur-xs px-4 py-2 rounded-2xl border border-[#E5D7CB] shadow-xs">
-                <span className="text-xs uppercase tracking-wider text-[#8C7A70] font-bold">ANY DIGITAL PLANNER</span>
-                <span className="font-sans text-3xl font-bold tracking-tight text-[#241E1C]">₹49</span>
-                <span className="text-xs line-through text-[#9F8D84] font-medium">₹499</span>
-                <span className="px-2 py-0.5 rounded-md bg-[#DFCCBF] text-[#3D302A] text-[10px] font-bold">90% OFF</span>
+              <div className="flex items-center gap-2 bg-white/90 backdrop-blur-xs px-4 py-2 rounded-2xl border border-[#E5D7CB] shadow-xs">
+                <span className="text-xs uppercase tracking-wider text-[#8C7A70] font-bold">DIGITAL DOWNLOADS</span>
+                <span className="px-2.5 py-0.5 rounded-md bg-[#DFCCBF] text-[#3D302A] text-[10px] font-bold">INSTANT ACCESS</span>
               </div>
               <div className="text-xs text-[#7A6960] flex items-center gap-1.5 font-medium">
                 <CheckCircle2 className="w-4 h-4 text-[#8E6E60]" />
@@ -152,7 +150,7 @@ export default function Hero({
                     </h3>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-[#29221F] text-white text-[10px] font-bold">
-                    ₹49
+                    DIGITAL PDF
                   </span>
                 </div>
 
@@ -227,7 +225,7 @@ export default function Hero({
               <div className="mt-4 flex items-center justify-between text-xs text-[#52443C] px-2 font-sans">
                 <div>
                   <span className="text-[10px] uppercase font-bold text-[#8A766B] block">DIGITAL ARCHITECTURE</span>
-                  <p className="font-syne font-bold text-sm text-[#27201D]">Plenvi 40-Template Omni System</p>
+                  <p className="font-syne font-bold text-sm text-[#27201D]">Plenvi Digital Planning System</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <button onClick={onOpenReader} className="hover:text-[#27201D] transition-colors" title="Launch Reader">

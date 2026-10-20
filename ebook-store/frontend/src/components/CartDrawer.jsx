@@ -111,7 +111,7 @@ export default function CartDrawer({
           <div className="flex items-center justify-between font-medium mb-1">
             <span className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#A67563]" />
-              {cartItems.length >= 3 ? 'VIP Free Bonus Unlocked!' : `Add ${Math.max(1, 3 - cartItems.length)} more to unlock 50% OFF`}
+              {cartItems.length >= 3 ? 'Special Discount Unlocked!' : `Add ${Math.max(1, 3 - cartItems.length)} more to unlock 50% OFF`}
             </span>
             <span className="font-mono text-[11px] font-bold">{cartItems.length}/3 items</span>
           </div>
@@ -132,7 +132,7 @@ export default function CartDrawer({
               </div>
               <h4 className="font-serif text-xl font-medium text-[#29221F]">Your cart is empty</h4>
               <p className="text-xs mt-1 max-w-xs">
-                Browse our collection of 40 digital planners, journals, and trackers at ₹49 each.
+                Browse our collection of digital planners, journals, and trackers.
               </p>
               <button
                 onClick={onClose}

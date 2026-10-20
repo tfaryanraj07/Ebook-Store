@@ -82,8 +82,8 @@ export default function Header({
           <div className="max-w-7xl mx-auto px-2 sm:px-4 text-center">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 py-1 px-3 sm:px-3.5 rounded-full bg-[#EFE3D8]/90 border border-[#E4D5C8] text-[#5A4841] text-[10px] sm:text-[11px] md:text-xs max-w-full">
               <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[#B88E7D] animate-ping shrink-0" />
-              <span className="font-semibold text-[#8B6B5D] shrink-0">Launch Special:</span>
-              <span className="truncate">All Planners Flat <strong>₹49</strong> (Reg. ₹499) • Code <strong className="font-mono text-[#78594C]">BUNDLE50</strong></span>
+              <span className="font-semibold text-[#8B6B5D] shrink-0">Digital Studio:</span>
+              <span className="truncate">Premium Planners & Trackers • Instant PDF & GoodNotes Access</span>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function Header({
                 }}
                 className={`hover:text-[#B88E7D] transition-colors cursor-pointer ${activeCategory === 'all' ? 'text-[#8E6E60] font-bold border-b border-[#8E6E60]' : ''}`}
               >
-                All 40 Planners
+                All Planners
               </button>
               <button 
                 onClick={() => {
@@ -148,7 +148,7 @@ export default function Header({
                 }}
                 className="hover:text-[#B88E7D] transition-colors cursor-pointer"
               >
-                Finance (₹49)
+                Finance
               </button>
               <button 
                 onClick={() => {
@@ -175,7 +175,7 @@ export default function Header({
                 href="#features-section"
                 className="hover:text-[#B88E7D] transition-colors cursor-pointer"
               >
-                The 40 Systems
+                Our Systems
               </a>
               <button 
                 onClick={onOpenReader}
@@ -184,7 +184,7 @@ export default function Header({
                 Interactive Demo
               </button>
               <span className="text-[#8E7467] font-bold">
-                Flat ₹49 Offer
+                Instant Delivery
               </span>
             </nav>
           )}
@@ -202,7 +202,7 @@ export default function Header({
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search 40 planners..."
+                      placeholder="Search planners..."
                       autoFocus
                       className="w-full md:w-44 text-xs bg-transparent focus:outline-none text-[#2D2622]"
                     />

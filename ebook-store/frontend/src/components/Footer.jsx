@@ -107,7 +107,7 @@ export default function Footer({ onSelectCategory, onSelectProduct, products = [
             </div>
 
             <p className="text-xs text-[#A8988F] leading-relaxed max-w-sm">
-              Crafted for intentional living. 40 digital planners, journals, and financial frameworks engineered for clarity, daily momentum, and calm focus.
+              Crafted for intentional living. Premium digital planners, journals, and financial frameworks engineered for clarity, daily momentum, and calm focus.
             </p>
           </div>
 

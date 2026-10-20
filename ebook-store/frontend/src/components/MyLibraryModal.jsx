@@ -58,7 +58,7 @@ export default function MyLibraryModal({
                 No planners in your library yet
               </h3>
               <p className="text-xs text-[#7F6E65] max-w-sm mx-auto">
-                Purchases made through our ₹49 collection are automatically added here with instant PDF download and GoodNotes sync.
+                Purchased planners and templates are automatically added here with instant PDF download and GoodNotes sync.
               </p>
             </div>
           ) : (

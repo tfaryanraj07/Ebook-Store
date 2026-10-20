@@ -22,7 +22,7 @@ export default function CategoryNav({
   onSelectCategory, 
   sortBy, 
   setSortBy,
-  productCount = 40
+  productCount = 0
 }) {
   return (
     <div id="catalog-section" className="sticky top-[60px] md:top-[68px] z-30 bg-[#FAF7F2]/95 backdrop-blur-md border-y border-[#E8DDD1] py-3 transition-all duration-200">
@@ -47,11 +47,6 @@ export default function CategoryNav({
                 >
                   <IconComp className={`w-3.5 h-3.5 ${isActive ? 'text-[#D9B4A4]' : 'text-[#8E6E60]'}`} />
                   <span>{cat.name}</span>
-                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-[#EFE5DB] text-[#6B5A51]'
-                  }`}>
-                    {cat.count}
-                  </span>
                 </button>
               );
             })}
@@ -72,7 +67,7 @@ export default function CategoryNav({
               >
                 <option value="popular">Most Popular</option>
                 <option value="rating">Highest Rated</option>
-                <option value="price-asc">Price: Low to High (₹49)</option>
+                <option value="price-asc">Price: Low to High</option>
                 <option value="title">Alphabetical (A-Z)</option>
               </select>
             </div>

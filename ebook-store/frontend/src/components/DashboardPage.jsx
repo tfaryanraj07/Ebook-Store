@@ -53,7 +53,7 @@ export default function DashboardPage({
                 Welcome to your Dashboard, {currentUser?.name || 'Member'}
               </h1>
               <p className="text-xs sm:text-sm text-[#7D6B60] leading-relaxed">
-                Access your licensed digital library, browse the 40-planner collection, and download your templates.
+                Access your licensed digital library, browse our planner collection, and download your templates.
               </p>
             </div>
 
@@ -104,7 +104,7 @@ export default function DashboardPage({
               </div>
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#8C7A70] block">ACCOUNT TIER</span>
-                <span className="font-sans text-xl font-bold text-emerald-800">VIP Member (₹49)</span>
+                <span className="font-sans text-xl font-bold text-emerald-800">Active Member</span>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function DashboardPage({
               </div>
               <h4 className="font-syne text-lg font-bold text-[#241E1C]">Your Digital Library is Empty</h4>
               <p className="text-xs text-[#7A6960] max-w-md mx-auto">
-                You haven't purchased any planners yet. Browse the catalog below to start your digital planning library at just ₹49!
+                You haven't purchased any planners yet. Browse the catalog below to start your digital planning library with instant access!
               </p>
               <button
                 onClick={() => document.getElementById('catalog-section')?.scrollIntoView({ behavior: 'smooth' })}
@@ -247,7 +247,7 @@ export default function DashboardPage({
         </div>
       </section>
 
-      {/* 3. SECTION: STORE CATALOG (ALL 40 PRODUCTS) */}
+      {/* 3. SECTION: STORE CATALOG */}
       <section className="py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
           <div className="flex items-center justify-between">
@@ -256,11 +256,11 @@ export default function DashboardPage({
                 EXPLORE COMPLETE COLLECTION
               </span>
               <h2 className="font-syne text-2xl sm:text-3xl font-extrabold text-[#241E1C]">
-                Digital Store Catalog (40 Templates)
+                Digital Store Catalog
               </h2>
             </div>
             <span className="text-xs font-bold text-[#8E6E60]">
-              Flat ₹49 per template
+              Instant Digital Delivery
             </span>
           </div>
         </div>
@@ -274,7 +274,7 @@ export default function DashboardPage({
           productCount={products.length}
         />
 
-        {/* 40-Product Grid with clean Outfit ₹49 prices */}
+        {/* Product Grid */}
         <ProductGrid
           products={products}
           onAddToCart={onAddToCart}
